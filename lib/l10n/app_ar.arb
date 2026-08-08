@@ -1,0 +1,43 @@
+{
+  "@@locale": "ar",
+
+  "appName": "زِمام",
+
+  "navWealth": "الثروة",
+  "navAccounts": "الحسابات",
+  "navDebts": "الديون",
+
+  "wealthTitle": "الثروة",
+  "accountsTitle": "الحسابات",
+  "debtsTitle": "الديون",
+
+  "wealthEmptyTitle": "ثروتك كلها في مكان واحد",
+  "wealthEmptyBody": "أضف حساباتك لترى ما تملكه كرقم واحد بعملتك الأساسية، مهما تعددت الدول التي توزعت عليها أموالك.",
+  "wealthEmptyAction": "أضف أول حساب",
+
+  "accountsEmptyTitle": "لا توجد حسابات بعد",
+  "accountsEmptyBody": "الحسابات هي أماكن أموالك: بنوك ومحافظ ونقد. أضف حسابًا واحدًا للبدء.",
+  "accountsEmptyAction": "أضف حسابًا",
+
+  "debtsEmptyTitle": "لا توجد ديون مسجلة",
+  "debtsEmptyBody": "سجّل ما عليك وما لك بعملته الأصلية، وشاهد كيف يغيّر سعر الصرف تكلفة السداد.",
+  "debtsEmptyAction": "أضف دينًا",
+
+  "settingsTitle": "الإعدادات",
+  "settingsOpenSemantic": "فتح الإعدادات",
+
+  "settingsLanguage": "اللغة",
+  "settingsLanguageSystem": "لغة النظام",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageArabic": "العربية",
+
+  "settingsAppearance": "المظهر",
+  "settingsThemeSystem": "حسب النظام",
+  "settingsThemeLight": "فاتح",
+  "settingsThemeDark": "داكن",
+
+  "settingsPrivacyTitle": "بياناتك تبقى على هذا الجهاز",
+  "settingsPrivacyBody": "يحفظ تطبيق زِمام أرصدتك وديونك على هذا الهاتف فقط. لا يُرفع شيء إلى الإنترنت، ولا يوجد حساب لتسجيل الدخول.",
+
+  "comingLater": "لم تُبنَ هذه الميزة بعد."
+}

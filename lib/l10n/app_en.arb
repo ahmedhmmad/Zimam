@@ -1,0 +1,64 @@
+{
+  "@@locale": "en",
+
+  "appName": "Zimam",
+  "@appName": {
+    "description": "The application name, shown in the launcher and app bar."
+  },
+
+  "navWealth": "Wealth",
+  "@navWealth": {
+    "description": "Bottom navigation label for the net-worth overview destination."
+  },
+  "navAccounts": "Accounts",
+  "@navAccounts": {
+    "description": "Bottom navigation label for the accounts list destination."
+  },
+  "navDebts": "Debts",
+  "@navDebts": {
+    "description": "Bottom navigation label for the debt ledger destination."
+  },
+
+  "wealthTitle": "Wealth",
+  "accountsTitle": "Accounts",
+  "debtsTitle": "Debts",
+
+  "wealthEmptyTitle": "Your wealth, in one place",
+  "@wealthEmptyTitle": {
+    "description": "Headline of the Wealth screen empty state."
+  },
+  "wealthEmptyBody": "Add your accounts to see everything you hold as a single figure in your home currency, however many countries it is spread across.",
+  "wealthEmptyAction": "Add your first account",
+
+  "accountsEmptyTitle": "No accounts yet",
+  "accountsEmptyBody": "Accounts are where your money sits: banks, wallets, cash. Add one to get started.",
+  "accountsEmptyAction": "Add an account",
+
+  "debtsEmptyTitle": "No debts recorded",
+  "debtsEmptyBody": "Track what you owe and what you are owed in its original currency, and see how exchange rates change the cost of settling up.",
+  "debtsEmptyAction": "Add a debt",
+
+  "settingsTitle": "Settings",
+  "settingsOpenSemantic": "Open settings",
+  "@settingsOpenSemantic": {
+    "description": "Screen-reader label for the settings icon button in the app bar."
+  },
+
+  "settingsLanguage": "Language",
+  "settingsLanguageSystem": "System language",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageArabic": "العربية",
+
+  "settingsAppearance": "Appearance",
+  "settingsThemeSystem": "Match system",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+
+  "settingsPrivacyTitle": "Your data stays on this device",
+  "settingsPrivacyBody": "Zimam stores your balances and debts only on this phone. Nothing is uploaded, and there is no account to sign in to.",
+
+  "comingLater": "This is not built yet.",
+  "@comingLater": {
+    "description": "Temporary notice shown when tapping a placeholder action during early development."
+  }
+}

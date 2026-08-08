@@ -1,0 +1,34 @@
+name: zimam
+description: "Cross-border personal wealth tracker. Local-first, multi-currency."
+publish_to: 'none'
+
+# versionName+versionCode. Version scheme is formalised in Phase 6.
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management.
+  flutter_riverpod: ^3.0.3
+
+  # Navigation.
+  go_router: ^17.2.1
+
+  # Localisation / formatting. Pulled in by flutter_localizations; pinned
+  # explicitly because Money formatting (Phase 1) depends on it directly.
+  intl: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true # enables gen-l10n (see l10n.yaml)
