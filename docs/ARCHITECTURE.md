@@ -134,8 +134,8 @@ the whole repayment-drift feature rests on.
 `notes`, timestamps. Each payment snapshots its own rate for the same reason.
 
 **`settings`** — single-row key/value store: `key`, `value`, `updated_at`.
-Home currency, scattered-balance threshold, dismissed insight ids, locale and
-theme mode.
+Home currency, digit style (see §5), scattered-balance threshold, dismissed
+insight ids, locale and theme mode.
 
 ### Migration strategy
 
@@ -161,10 +161,22 @@ direction-agnostic primitives (`EdgeInsetsDirectional`, `start`/`end`,
 `Alignment*Directional`) so mirroring is automatic. The Android manifest sets
 `supportsRtl`, and the launcher label is localised via `values-ar/strings.xml`.
 
-**Open question deferred to Phase 1:** whether Arabic locale should render
-amounts in Arabic-Indic digits (`١٢٣`, `intl`'s default for `ar`) or Western
-digits, which most Gulf and Levant banking apps use. This affects the `Money`
-formatter, so it needs a decision before that code is written.
+### Digit style
+
+Numerals are a **user preference, not a consequence of the locale**. Arabic
+speakers are split: `intl` defaults the `ar` locale to Arabic-Indic digits
+(`١٢٣`), while most Gulf and Levant banking apps show Western digits (`123`),
+and the same person may want Arabic prose with Western figures.
+
+- Setting: `digit_style` in `settings`, values `western` | `arabicIndic`.
+- **Default is `western`**, in both locales.
+- The `Money` formatter takes the style as an input rather than reading the
+  ambient locale, which keeps it a pure function and directly testable. In
+  practice this means constructing `NumberFormat` against `ar` for grouping and
+  separators, then mapping the digit glyphs according to the setting — never
+  letting the locale decide the glyphs implicitly.
+- Every amount in the app renders through that one formatter, so the setting
+  cannot apply inconsistently across screens.
 
 ---
 
@@ -205,5 +217,4 @@ Text scaling is honoured and clamped at 200% in `app.dart`.
 |---|---|
 | Material You dynamic colour | Needs the `dynamic_color` package, which is not in the approved dependency list. `AppTheme.light/dark` already accept a `ColorScheme?`, so enabling it is a two-line change in `app.dart`. Awaiting approval. |
 | Theme/locale persistence | Held in memory today; moves into the `settings` table in Phase 1. |
-| Arabic-Indic vs Western digits | See §5. Decide before writing the `Money` formatter. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |

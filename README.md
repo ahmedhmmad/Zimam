@@ -1,4 +1,4 @@
-# Zimam — زِمام
+# Zimam — زمام
 
 A cross-border personal wealth tracker for people whose money is spread across
 several countries, banks, wallets and currencies.
