@@ -208,6 +208,24 @@ sizes and exactly one hero figure.
 
 Text scaling is honoured and clamped at 200% in `app.dart`.
 
+### Colour is for data state, never for category
+
+The design system's own rule — "colors are used strictly for data state" — has one
+consequence that is easy to get wrong and was got wrong in the source designs:
+**a set of categories must never be coloured with the semantic ramp.**
+
+The Stitch currency-composition bar assigns `primary` to AED, `secondary` to
+JOD, `tertiary` to USD and `outline` to EGP, purely by list order. Since
+`secondary` is Gain and `tertiary` is Loss, that paints the user's dollar
+holdings in the loss colour and their dinar holdings in the gain colour, for no
+reason connected to the data. A glance at the bar reads as "the red one is
+losing money".
+
+Anything enumerating currencies, accounts or institutions needs a categorical
+ramp that is deliberately *not* the semantic one — tonal steps of a single hue
+are enough, and they keep gain/loss meaningful where it matters. This applies to
+the composition bar, its legend, and any per-account colour chosen in Phase 2.
+
 ---
 
 ## 7. Testing
@@ -226,8 +244,9 @@ Text scaling is honoured and clamped at 200% in `app.dart`.
 |---|---|
 | Material You dynamic colour | **Dropped, deliberately.** A device-derived palette would override the greens and reds that carry meaning here. `docs/DESIGN.md` wins over the wallpaper. |
 | Font assets | IBM Plex Sans, IBM Plex Sans Arabic and JetBrains Mono are declared in the theme but **not bundled**, so both families currently fall back to the platform default. Sizes, weights and line heights are already correct. |
-| Dark palette | Derived, not specified. `docs/DESIGN.md` gives a full light palette but only two dark values in prose. The rest is reconstructed from the `*-fixed` tonal tokens — see the comment on `AppColorSchemes.dark`. Confirm against a real dark export. |
-| "Attention" colour | The design system names Attention as a semantic role but ships no token for it. `AppSemanticColors.alert` carries a held-over amber until one exists. |
+| Dark palette | Derived, not specified — and **confirmed to exist nowhere upstream**. The Stitch project's Tailwind config carries only the 47 light tokens; its "dark" screens are `dark:` variants pointing back at light token names, which is why the dark app bar renders near-invisible. Our reconstruction from the `*-fixed` tonal tokens is the best available source. See `AppColorSchemes.dark`. |
+| "Attention" colour | The design system names Attention as a semantic role but ships no token for it. Confirmed harmful: the Arabic Wealth screen renders the dormancy insight ("Banque Misr hasn't been updated in 94 days") on a loss-red card, reporting a housekeeping nudge as a financial loss. `AppSemanticColors.alert` carries a held-over amber until a real token exists. |
 | Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
+| Source designs contradict the written system | The generated screens use `rounded-full` 60 times (the system forbids pill buttons) and `rounded-xl` = 12px for cards (the system fixes cards at 16px), and apply `font-label-mono` to prose — mono is the most-used font class in the export, though it is specified for figures only. The written system wins; the theme follows it. |
 | Theme/locale persistence | Held in memory today; moves into the `settings` table in Phase 1. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |
