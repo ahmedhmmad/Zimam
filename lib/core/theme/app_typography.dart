@@ -89,7 +89,20 @@ abstract final class AppTypography {
         fontFeatures: _tabular,
       );
 
-  /// The one hero figure on a screen.
+  /// UI label — sans, 14/20. Navigation labels, chips, field labels.
+  ///
+  /// Distinct from [labelMono], which is the *figure* style at the same size.
+  /// A nav destination is prose and must not be monospaced.
+  static const TextStyle labelSans = TextStyle(
+    fontFamily: sans,
+    fontFamilyFallback: _fallback,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// The one hero figure on a screen. Sans with tabular figures, per the
+  /// design system's `display-hero`.
   static TextStyle amountHero(BuildContext context) =>
       Theme.of(context).textTheme.displaySmall!;
 
@@ -97,30 +110,44 @@ abstract final class AppTypography {
   static TextStyle amountTitle(BuildContext context) =>
       asAmount(Theme.of(context).textTheme.titleLarge!);
 
-  /// A figure inside a list row.
+  /// A figure inside a list row — the design system's `label-mono`.
   static TextStyle amountBody(BuildContext context) =>
-      Theme.of(context).textTheme.labelLarge!;
+      labelMono.copyWith(color: Theme.of(context).colorScheme.onSurface);
 
   /// A secondary figure — the home-currency equivalent under a native amount.
-  static TextStyle amountSecondary(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.textTheme.labelLarge!.copyWith(
-      color: theme.colorScheme.onSurfaceVariant,
-    );
-  }
+  static TextStyle amountSecondary(BuildContext context) => labelMono.copyWith(
+    color: Theme.of(context).colorScheme.onSurfaceVariant,
+  );
 
-  /// Maps the short design ramp onto the Material slots the app actually uses.
-  /// Slots left untouched keep Material's defaults and should stay unused.
+  /// Maps the design ramp onto the Material slots the app actually uses.
+  ///
+  /// Two rules here, both learned the hard way.
+  ///
+  /// **Merge, never `copyWith` a bare [TextStyle].** The styles above carry no
+  /// colour, so assigning one wholesale discards the colour Material derived
+  /// from the scheme and the text renders in whatever the ancestor default
+  /// happens to be — near-invisible on a light canvas. `merge` layers the
+  /// family, size and weight over the base while its colour survives.
+  ///
+  /// **No monospace in these slots.** Every slot here is IBM Plex Sans.
+  /// JetBrains Mono is reached only through [asAmount] and the `amount*`
+  /// helpers, so a widget cannot become monospaced just by using a standard
+  /// text style — which is exactly how the source designs ended up with
+  /// monospaced prose.
   static TextTheme textTheme(TextTheme base) {
     return base.copyWith(
-      displaySmall: displayHero,
-      headlineSmall: headlineMd,
-      titleLarge: headlineMd,
-      titleMedium: bodyLg.copyWith(fontWeight: FontWeight.w500),
-      bodyLarge: bodyLg,
-      bodyMedium: bodyLg,
-      labelLarge: labelMono,
-      labelMedium: labelMono.copyWith(fontSize: 12, height: 16 / 12),
+      displaySmall: base.displaySmall?.merge(displayHero),
+      headlineSmall: base.headlineSmall?.merge(headlineMd),
+      titleLarge: base.titleLarge?.merge(headlineMd),
+      titleMedium: base.titleMedium?.merge(
+        bodyLg.copyWith(fontWeight: FontWeight.w500),
+      ),
+      bodyLarge: base.bodyLarge?.merge(bodyLg),
+      bodyMedium: base.bodyMedium?.merge(bodyLg),
+      labelLarge: base.labelLarge?.merge(labelSans),
+      labelMedium: base.labelMedium?.merge(
+        labelSans.copyWith(fontSize: 12, height: 16 / 12),
+      ),
     );
   }
 }

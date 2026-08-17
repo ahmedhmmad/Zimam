@@ -134,7 +134,7 @@ void main() {
       // This asserts the guard exists rather than a deleteAllTables() default.
       final strategy = db.migration;
       expect(
-        () => strategy.onUpgrade!(FakeMigrator(), 1, 2),
+        () => strategy.onUpgrade(FakeMigrator(), 1, 2),
         throwsStateError,
       );
     });
