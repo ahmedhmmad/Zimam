@@ -182,20 +182,29 @@ and the same person may want Arabic prose with Western figures.
 
 ## 6. Theming
 
-Material 3. `AppTheme` builds light and dark from a fallback seed
-(`#1B5E63`), with a hook for a platform-supplied `ColorScheme` that is not yet
-wired (see §8). Data surfaces are flat — no gradients, no shadow — and
-elevation is near zero throughout.
+**`docs/DESIGN.md` is the source of truth.** It carries the palette, type ramp,
+spacing and shape tokens. Changing a colour or a size means editing that file
+first, then transcribing it into `lib/core/theme/`. Nothing in the theme is
+generated from a seed any more.
 
-Colour that carries meaning is deliberately *not* in `ColorScheme`. It lives in
-an `AppSemanticColors` theme extension with four roles — `gain`, `loss`,
-`alert`, `neutral` — read via `context.semantic`. This makes every meaningful
-colour choice explicit at the call site and keeps brand colour from
-accidentally being read as "up" or "down".
+Material 3, with the palette given explicitly in `AppColorSchemes`. Design brief
+is "Quiet Precision": flat surfaces, no gradients, **no shadows at all** —
+depth is communicated by tonal layering, so a card is separated from the canvas
+by fill contrast alone (`#ffffff` on `#f2f4f4` in light, `#1c1f1f` on `#121414`
+in dark). Pressing a surface changes its fill rather than lifting it.
 
-Currency amounts must use `AppTypography.amount*`, which applies
-`FontFeature.tabularFigures()`. Without it, digits change width as values
-update and the number visibly jitters.
+Colour that carries meaning is deliberately *not* read from `ColorScheme` at
+call sites. It lives in the `AppSemanticColors` extension — `gain`, `loss`,
+`alert`, `neutral`, plus container pairs — reached via `context.semantic`. The
+design system maps Gain onto Material's `secondary` and Loss onto `tertiary`;
+that mapping is recorded in one place so a call site never has to know it, and
+so `colorScheme.secondary` is never mistaken for a brand colour.
+
+Two families, strictly divided: **IBM Plex Sans** for prose, **JetBrains Mono**
+for every amount, percentage and date. Use `AppTypography.amount*` or
+`asAmount()` — never a raw `TextTheme` entry — so figures stay tabular and
+digits do not shift width as values update. A screen shows at most three type
+sizes and exactly one hero figure.
 
 Text scaling is honoured and clamped at 200% in `app.dart`.
 
@@ -215,6 +224,10 @@ Text scaling is honoured and clamped at 200% in `app.dart`.
 
 | Item | Status |
 |---|---|
-| Material You dynamic colour | Needs the `dynamic_color` package, which is not in the approved dependency list. `AppTheme.light/dark` already accept a `ColorScheme?`, so enabling it is a two-line change in `app.dart`. Awaiting approval. |
+| Material You dynamic colour | **Dropped, deliberately.** A device-derived palette would override the greens and reds that carry meaning here. `docs/DESIGN.md` wins over the wallpaper. |
+| Font assets | IBM Plex Sans, IBM Plex Sans Arabic and JetBrains Mono are declared in the theme but **not bundled**, so both families currently fall back to the platform default. Sizes, weights and line heights are already correct. |
+| Dark palette | Derived, not specified. `docs/DESIGN.md` gives a full light palette but only two dark values in prose. The rest is reconstructed from the `*-fixed` tonal tokens — see the comment on `AppColorSchemes.dark`. Confirm against a real dark export. |
+| "Attention" colour | The design system names Attention as a semantic role but ships no token for it. `AppSemanticColors.alert` carries a held-over amber until one exists. |
+| Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
 | Theme/locale persistence | Held in memory today; moves into the `settings` table in Phase 1. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |
