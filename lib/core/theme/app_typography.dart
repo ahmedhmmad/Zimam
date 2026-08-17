@@ -13,16 +13,26 @@ import 'package:flutter/material.dart';
 /// hero number, so the ramp below is deliberately short. Anything not listed
 /// here is derived by Material and should not appear in a design.
 ///
-/// NOTE: the font files are not bundled yet, so both families currently fall
-/// back to the platform default. Sizes, weights and line heights are already
-/// correct; adding the assets is what makes it look right.
+/// All three families are bundled under `assets/fonts/` and declared in
+/// `pubspec.yaml`. Nothing is fetched at runtime — the app must render
+/// correctly on a cold start with no network.
 abstract final class AppTypography {
   static const String sans = 'IBM Plex Sans';
   static const String mono = 'JetBrains Mono';
 
-  /// Arabic UI text. The Stitch design used IBM Plex Sans Arabic, which is a
-  /// separate family from IBM Plex Sans — Latin Plex has no Arabic coverage.
+  /// Arabic UI text. A separate typeface from the Latin family — IBM Plex Sans
+  /// contains no Arabic glyphs whatsoever.
   static const String sansArabic = 'IBM Plex Sans Arabic';
+
+  /// Applied to every style so a single [TextStyle] renders both scripts.
+  ///
+  /// Without this, Arabic text asking for `IBM Plex Sans` finds no matching
+  /// glyphs and silently drops to whatever the platform provides — the Arabic
+  /// UI would quietly stop using the design system's typeface. The fallback
+  /// only engages for codepoints the primary family cannot render, so Latin
+  /// text is unaffected. Mono carries it too: the digit-style setting can put
+  /// Arabic-Indic numerals in a figure, which JetBrains Mono does not cover.
+  static const List<String> _fallback = [sansArabic];
 
   static const List<FontFeature> _tabular = [FontFeature.tabularFigures()];
 
@@ -33,6 +43,7 @@ abstract final class AppTypography {
   /// The app is portrait-only, so the mobile size is the one that ships.
   static const TextStyle displayHero = TextStyle(
     fontFamily: sans,
+    fontFamilyFallback: _fallback,
     fontSize: 32,
     height: 40 / 32,
     fontWeight: FontWeight.w600,
@@ -43,6 +54,7 @@ abstract final class AppTypography {
   /// `headline-md` — 20/28, w500. Section and card headings.
   static const TextStyle headlineMd = TextStyle(
     fontFamily: sans,
+    fontFamilyFallback: _fallback,
     fontSize: 20,
     height: 28 / 20,
     fontWeight: FontWeight.w500,
@@ -51,6 +63,7 @@ abstract final class AppTypography {
   /// `body-lg` — 16/24, w400. Default reading size.
   static const TextStyle bodyLg = TextStyle(
     fontFamily: sans,
+    fontFamilyFallback: _fallback,
     fontSize: 16,
     height: 24 / 16,
     fontWeight: FontWeight.w400,
@@ -60,6 +73,7 @@ abstract final class AppTypography {
   /// percentages, and any label that sits beside a number.
   static const TextStyle labelMono = TextStyle(
     fontFamily: mono,
+    fontFamilyFallback: _fallback,
     fontSize: 14,
     height: 20 / 14,
     fontWeight: FontWeight.w500,
@@ -69,7 +83,11 @@ abstract final class AppTypography {
   /// Turns any style into a figure style: monospaced, tabular, same size.
   /// Use this rather than hand-setting `fontFamily` at a call site.
   static TextStyle asAmount(TextStyle style) =>
-      style.copyWith(fontFamily: mono, fontFeatures: _tabular);
+      style.copyWith(
+        fontFamily: mono,
+        fontFamilyFallback: _fallback,
+        fontFeatures: _tabular,
+      );
 
   /// The one hero figure on a screen.
   static TextStyle amountHero(BuildContext context) =>

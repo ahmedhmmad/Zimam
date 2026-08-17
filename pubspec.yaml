@@ -32,3 +32,33 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true # enables gen-l10n (see l10n.yaml)
+
+  # Bundled rather than fetched at runtime: the app is local-first and must
+  # render correctly on a cold start in airplane mode. Both families are
+  # OFL 1.1 licensed — see the OFL-*.txt files alongside them.
+  fonts:
+    # Prose. The Arabic family is a separate typeface from the Latin one;
+    # Latin IBM Plex Sans has no Arabic coverage at all.
+    - family: IBM Plex Sans
+      fonts:
+        - asset: assets/fonts/IBMPlexSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/IBMPlexSans-SemiBold.ttf
+          weight: 600
+    - family: IBM Plex Sans Arabic
+      fonts:
+        - asset: assets/fonts/IBMPlexSansArabic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexSansArabic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/IBMPlexSansArabic-SemiBold.ttf
+          weight: 600
+    # Every currency amount, percentage and date.
+    - family: JetBrains Mono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/JetBrainsMono-Medium.ttf
+          weight: 500
