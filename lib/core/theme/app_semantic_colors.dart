@@ -47,16 +47,17 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
   final Color alertContainer;
   final Color onAlertContainer;
 
-  /// NOT FROM THE DESIGN SYSTEM. `docs/DESIGN.md` names "Attention" as one of
-  /// its four semantic roles but ships no token for it — there is no amber
-  /// anywhere in the palette. The Scattered Balance Radar and the dormancy
-  /// insight both need a third state that is neither good nor bad, and reusing
-  /// `loss` for "you haven't updated this in 94 days" would misreport a
-  /// housekeeping nudge as a financial loss.
+  /// The Attention role, now supplied by the design system's palette specimen.
   ///
-  /// These values are held over from the pre-design-system theme and clear
-  /// 4.5:1 on their surfaces. Replace them as soon as the design system
-  /// defines a real Attention token.
+  /// `docs/DESIGN.md` named Attention as a semantic role but shipped no token,
+  /// which is why the dormancy insight was rendering loss-red — reporting "not
+  /// updated in 94 days" as a financial loss. The light values below are
+  /// transcribed from the specimen and independently verified: 6.85:1 on white,
+  /// 6.21:1 on the canvas, 11.63:1 for content on its container.
+  ///
+  /// Dark mode remains ours — the specimen is light-only, like the rest of the
+  /// design system. Verified at 10.85:1 on the dark canvas and 7.63:1 for
+  /// content on its container.
   static const Color _attentionLight = Color(0xFF7A5300);
   static const Color _attentionDark = Color(0xFFE9C170);
 
@@ -73,8 +74,8 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     // faithfully rather than silently corrected — worth raising upstream.
     lossContainer: Color(0xFFA3222A),
     onLossContainer: Color(0xFFFFB9B5),
-    alertContainer: Color(0xFFF8EBCE),
-    onAlertContainer: _attentionLight,
+    alertContainer: Color(0xFFFFEFD1),
+    onAlertContainer: Color(0xFF422C00),
   );
 
   static const AppSemanticColors dark = AppSemanticColors(
