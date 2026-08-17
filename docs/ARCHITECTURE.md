@@ -140,12 +140,27 @@ insight ids, locale and theme mode.
 ### Migration strategy
 
 Drift `schemaVersion` starts at 1. Every schema change bumps the version and
-adds a step to a `MigrationStrategy` that is written *at the same time as the
-change* — never a `deleteAllTables()` fallback, because there is no cloud copy
-of the user's data to restore from. Schema snapshots are exported to
-`drift_schemas/` so `drift_dev`'s migration tests can verify every upgrade path
-from v1 forward. Adding a column is `ALTER TABLE`; anything destructive gets a
-copy-and-swap migration with a test that asserts row counts survive.
+adds a step to the `MigrationStrategy` **in the same commit as the change**.
+
+There is deliberately no `deleteAllTables()` fallback. That idiom is standard
+in server-backed apps, where wiping and re-syncing costs the user nothing; here
+it would destroy the only copy of someone's financial history. `onUpgrade`
+instead throws with an explanatory message, and `schema_test.dart` asserts that
+it does — so a forgotten migration fails loudly in CI rather than silently on a
+user's phone. Adding a column is `ALTER TABLE`; anything destructive gets a
+copy-and-swap with a test asserting row counts and sample values survive.
+
+**Timestamps are stored as UTC ISO-8601 text, not unix integers.** Drift's
+integer default returns *local* `DateTime`s on read. Since rate dates are UTC
+midnight and staleness is computed by comparing calendar days, that default
+makes every conversion report a day staler than it is for any user west of
+UTC. This was caught by a test, not by review.
+
+**Known toolchain gap:** `dart run drift_dev schema dump` currently fails
+against drift 2.34.x (`allSchemaEntities` was moved in an internal refactor),
+so there are no snapshots in `drift_schemas/` yet. Nothing depends on them at
+v1 — there are no migrations to verify — but this must be resolved before the
+first schema bump.
 
 ---
 
@@ -264,5 +279,6 @@ thresholds are tested.
 | ~~Categorical colour~~ | **Closed.** `AppCategoryColors`, five tonal teal steps plus a neutral tail — see §6. The specimen's own seven-step ramp was measured and rejected. |
 | Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
 | Source designs contradict the written system | The generated screens use `rounded-full` 60 times (the system forbids pill buttons) and `rounded-xl` = 12px for cards (the system fixes cards at 16px), and apply `font-label-mono` to prose — mono is the most-used font class in the export, though it is specified for figures only. The written system wins; the theme follows it. |
-| Theme/locale persistence | Held in memory today; moves into the `settings` table in Phase 1. |
+| Theme/locale persistence | Still in memory. The `settings` table and its DAO now exist, so this is a small wiring change; home currency and digit style already persist through it. |
+| `drift_dev schema dump` | Broken against drift 2.34.x. Resolve before the first migration. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |
