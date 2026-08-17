@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_category_colors.dart';
 import 'app_color_schemes.dart';
 import 'app_semantic_colors.dart';
 import 'app_spacing.dart';
@@ -15,13 +16,23 @@ import 'app_typography.dart';
 /// device-derived palette would override the semantic greens and reds that
 /// carry meaning here.
 abstract final class AppTheme {
-  static ThemeData light() =>
-      _build(AppColorSchemes.light, AppSemanticColors.light);
+  static ThemeData light() => _build(
+        AppColorSchemes.light,
+        AppSemanticColors.light,
+        AppCategoryColors.light,
+      );
 
-  static ThemeData dark() =>
-      _build(AppColorSchemes.dark, AppSemanticColors.dark);
+  static ThemeData dark() => _build(
+        AppColorSchemes.dark,
+        AppSemanticColors.dark,
+        AppCategoryColors.dark,
+      );
 
-  static ThemeData _build(ColorScheme scheme, AppSemanticColors semantic) {
+  static ThemeData _build(
+    ColorScheme scheme,
+    AppSemanticColors semantic,
+    AppCategoryColors categories,
+  ) {
     final base = ThemeData(colorScheme: scheme, useMaterial3: true);
     final text = AppTypography.textTheme(base.textTheme);
 
@@ -30,7 +41,7 @@ abstract final class AppTheme {
     );
 
     return base.copyWith(
-      extensions: [semantic],
+      extensions: [semantic, categories],
       textTheme: text,
       scaffoldBackgroundColor: scheme.surface,
 

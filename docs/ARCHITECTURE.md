@@ -221,10 +221,25 @@ holdings in the loss colour and their dinar holdings in the gain colour, for no
 reason connected to the data. A glance at the bar reads as "the red one is
 losing money".
 
-Anything enumerating currencies, accounts or institutions needs a categorical
-ramp that is deliberately *not* the semantic one — tonal steps of a single hue
-are enough, and they keep gain/loss meaningful where it matters. This applies to
-the composition bar, its legend, and any per-account colour chosen in Phase 2.
+Anything enumerating currencies, accounts or institutions therefore uses
+`AppCategoryColors` via `context.categories`, never `AppSemanticColors`. The
+ramp is five tonal steps of the brand teal plus a neutral `other`, ordered by
+descending share, distinguished by lightness alone so it survives deuteranopia
+and protanopia and can never be read as a gain or a loss.
+
+**Five steps, not six, and that is a hard ceiling.** Requiring each step to
+clear 3:1 against its surface caps luminance at 0.283, while the darkest usable
+teal sits at 0.020. The whole band spans 3:1 to 15.4:1, so six single-hue steps
+could be at most 1.39:1 apart from one another — indistinguishable in a bar.
+Holdings past the fifth belong in `other`; `forIndex` deliberately falls through
+to it rather than wrapping, since wrapping would give two currencies the same
+colour in one chart.
+
+`test/theme/palette_contrast_test.dart` asserts all of this. It is not
+ceremonial: the ramp originally supplied for this role had three of seven steps
+between 1.40:1 and 2.26:1 against the card, and two steps within 1.03:1 of each
+other. Palettes read as fine to the eye while being measurably wrong, so the
+thresholds are tested.
 
 ---
 
@@ -245,7 +260,8 @@ the composition bar, its legend, and any per-account colour chosen in Phase 2.
 | Material You dynamic colour | **Dropped, deliberately.** A device-derived palette would override the greens and reds that carry meaning here. `docs/DESIGN.md` wins over the wallpaper. |
 | Font assets | IBM Plex Sans, IBM Plex Sans Arabic and JetBrains Mono are declared in the theme but **not bundled**, so both families currently fall back to the platform default. Sizes, weights and line heights are already correct. |
 | Dark palette | Derived, not specified — and **confirmed to exist nowhere upstream**. The Stitch project's Tailwind config carries only the 47 light tokens; its "dark" screens are `dark:` variants pointing back at light token names, which is why the dark app bar renders near-invisible. Our reconstruction from the `*-fixed` tonal tokens is the best available source. See `AppColorSchemes.dark`. |
-| "Attention" colour | The design system names Attention as a semantic role but ships no token for it. Confirmed harmful: the Arabic Wealth screen renders the dormancy insight ("Banque Misr hasn't been updated in 94 days") on a loss-red card, reporting a housekeeping nudge as a financial loss. `AppSemanticColors.alert` carries a held-over amber until a real token exists. |
+| ~~"Attention" colour~~ | **Closed.** Supplied by the palette specimen and adopted: `#7a5300` with a `#ffefd1` / `#422c00` container pair. Verified at 6.85:1 on white and 11.63:1 for content on its container. Dark mode remains ours, the specimen being light-only. |
+| ~~Categorical colour~~ | **Closed.** `AppCategoryColors`, five tonal teal steps plus a neutral tail — see §6. The specimen's own seven-step ramp was measured and rejected. |
 | Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
 | Source designs contradict the written system | The generated screens use `rounded-full` 60 times (the system forbids pill buttons) and `rounded-xl` = 12px for cards (the system fixes cards at 16px), and apply `font-label-mono` to prose — mono is the most-used font class in the export, though it is specified for figures only. The written system wins; the theme follows it. |
 | Theme/locale persistence | Held in memory today; moves into the `settings` table in Phase 1. |
