@@ -39,23 +39,34 @@ class CompositionBar extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
-            final segments = <Widget>[];
 
-            for (var i = 0; i < holdings.length; i++) {
-              final share = holdings[i].shareOf(total).clamp(0.0, 1.0);
-              // A 0.4% holding would otherwise render as a sub-pixel sliver
-              // and vanish, which is exactly the money this app exists to
-              // stop people forgetting about.
-              final segmentWidth = (share * width).clamp(_minSegment, width);
-              segments.add(
-                SizedBox(
-                  width: segmentWidth,
-                  child: ColoredBox(color: categories.forIndex(i)),
-                ),
-              );
+            // A 0.4% holding would render as a sub-pixel sliver and vanish,
+            // which is exactly the money this app exists to stop people
+            // forgetting about — so every segment gets a visible minimum.
+            var widths = [
+              for (final holding in holdings)
+                (holding.shareOf(total).clamp(0.0, 1.0) * width)
+                    .clamp(_minSegment, width),
+            ];
+
+            // Those minimums can push the total past the available width, and
+            // a Row that overflows renders as a striped warning bar rather
+            // than a composition. Scale everything back to fit.
+            final sum = widths.fold<double>(0, (a, b) => a + b);
+            if (sum > width && sum > 0) {
+              final factor = width / sum;
+              widths = [for (final w in widths) w * factor];
             }
 
-            return Row(children: segments);
+            return Row(
+              children: [
+                for (var i = 0; i < widths.length; i++)
+                  SizedBox(
+                    width: widths[i],
+                    child: ColoredBox(color: categories.forIndex(i)),
+                  ),
+              ],
+            );
           },
         ),
       ),

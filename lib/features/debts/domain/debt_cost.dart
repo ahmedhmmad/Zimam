@@ -80,6 +80,16 @@ final class DebtCostCalculator {
 
     final original = debt.rateAtCreation;
 
+    // Both rates must quote in the same unit, or the subtractions below are
+    // meaningless. A caller that passes a rate quoted in the app's *current*
+    // home currency for a debt recorded under a different one used to reach
+    // `EGP − USD` and take the whole screen down; refusing the comparison
+    // leaves the historical figures readable instead.
+    if (todaysRate.base != debt.currency ||
+        todaysRate.quote != debt.homeCurrency) {
+      return null;
+    }
+
     // Each instalment converted at the rate on the day it was actually paid —
     // this is what the user really handed over.
     final paidSoFar = Money.sum(

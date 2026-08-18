@@ -277,4 +277,41 @@ void main() {
       expect(debt().isOverdue, isFalse);
     });
   });
+
+  group('mismatched quote currencies', () {
+    test('refuses to compare rates quoted in different currencies', () {
+      // The crash a user hit: after changing home currency, the caller passed
+      // a rate quoted in the new home currency for a debt recorded under the
+      // old one, and the subtraction reached EGP minus USD.
+      final egp = CurrencyRegistry.of('EGP');
+      final todayInEgp = FxRate.parse(
+        base: usd,
+        quote: egp,
+        rate: '48.5',
+        rateDate: today,
+        fetchedAt: today,
+      );
+
+      // debt() is recorded with JOD as its home currency.
+      expect(calculator.compute(debt(), todaysRate: todayInEgp), isNull);
+    });
+
+    test('refuses a rate whose base is not the debt currency', () {
+      final aedRate = FxRate.parse(
+        base: aed,
+        quote: jod,
+        rate: '0.193',
+        rateDate: today,
+        fetchedAt: today,
+      );
+      expect(calculator.compute(debt(), todaysRate: aedRate), isNull);
+    });
+
+    test('accepts a correctly quoted rate', () {
+      expect(
+        calculator.compute(debt(), todaysRate: rate('0.731')),
+        isNotNull,
+      );
+    });
+  });
 }
