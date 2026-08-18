@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zimam/app.dart';
+import 'package:zimam/core/money/currency.dart';
 import 'package:zimam/l10n/l10n.dart';
 
-/// Phase 0 smoke tests. UI tests are not a general requirement for this
-/// project, but the shell, both locales and text direction are the whole
-/// deliverable of this phase, so they get a guard.
-void main() {
-  Future<void> pumpApp(WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: ZimamApp()));
-    await tester.pumpAndSettle();
-  }
+import 'support/test_app.dart';
 
-  // Destination labels repeat as app-bar titles ("Wealth" is both), so nav
-  // assertions are scoped to the bar itself.
+/// Shell-level tests: navigation, both locales, and text direction.
+void main() {
+  final jod = CurrencyRegistry.of('JOD');
+
   Finder navItem(String label) => find.descendant(
     of: find.byType(NavigationBar),
     matching: find.text(label),
   );
 
   testWidgets('starts on Wealth with all three destinations', (tester) async {
-    await pumpApp(tester);
-
+    await pumpApp(tester, homeCurrency: jod);
     final l10n = await AppL10n.delegate.load(const Locale('en'));
 
     expect(find.text(l10n.wealthEmptyTitle), findsOneWidget);
@@ -32,38 +25,46 @@ void main() {
   });
 
   testWidgets('navigating destinations swaps the screen', (tester) async {
-    await pumpApp(tester);
-
+    await pumpApp(tester, homeCurrency: jod);
     final l10n = await AppL10n.delegate.load(const Locale('en'));
 
     await tester.tap(navItem(l10n.navDebts));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text(l10n.debtsEmptyTitle), findsOneWidget);
 
     await tester.tap(navItem(l10n.navAccounts));
-    await tester.pumpAndSettle();
+    await settle(tester);
     expect(find.text(l10n.accountsEmptyTitle), findsOneWidget);
   });
 
   testWidgets('choosing Arabic translates the UI and flips direction', (
     tester,
   ) async {
-    await pumpApp(tester);
-
+    await pumpApp(tester, homeCurrency: jod);
     final en = await AppL10n.delegate.load(const Locale('en'));
     final ar = await AppL10n.delegate.load(const Locale('ar'));
 
     await tester.tap(find.byIcon(Icons.settings_outlined));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     await tester.tap(find.text(en.settingsLanguageArabic));
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     expect(find.text(ar.settingsTitle), findsOneWidget);
     expect(
       Directionality.of(tester.element(find.text(ar.settingsTitle))),
       TextDirection.rtl,
     );
+  });
+
+  testWidgets('a first run lands on onboarding, not on Wealth', (tester) async {
+    // No home currency set: the app cannot report a figure in a currency the
+    // user has not chosen, so it must ask first.
+    await pumpApp(tester);
+    final l10n = await AppL10n.delegate.load(const Locale('en'));
+
+    expect(find.text(l10n.onboardingCurrencyTitle), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
   });
 
   testWidgets('every locale in the ARB set resolves without throwing', (

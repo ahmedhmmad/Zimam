@@ -10,11 +10,13 @@ class DestinationScaffold extends StatelessWidget {
   const DestinationScaffold({
     required this.title,
     required this.child,
+    this.floatingActionButton,
     super.key,
   });
 
   final String title;
   final Widget child;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class DestinationScaffold extends StatelessWidget {
         ],
       ),
       body: SafeArea(child: child),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

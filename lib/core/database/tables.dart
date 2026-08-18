@@ -21,6 +21,7 @@ mixin _Timestamps on Table {
 /// [BalanceSnapshots], because "what is it now" and "what was it in March"
 /// are the same question asked on different dates, and the FX-drift feature
 /// needs both.
+@DataClassName('AccountRow')
 class Accounts extends Table with _Timestamps {
   TextColumn get id => text()();
 
@@ -58,6 +59,7 @@ class Accounts extends Table with _Timestamps {
 /// the change the user caused, while re-converting one snapshot at two
 /// different rates gives the change the market caused. Editing in place would
 /// destroy the ability to tell those apart.
+@DataClassName('BalanceSnapshotRow')
 class BalanceSnapshots extends Table with _Timestamps {
   TextColumn get id => text()();
 

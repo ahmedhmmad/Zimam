@@ -90,8 +90,28 @@ lib/
     generated/                   gen-l10n output (git-ignored)
 ```
 
-Features as of Phase 0: `wealth`, `accounts`, `debts`, `settings`. Phase 3 adds
-`insights`, Phase 5 adds `capture`.
+Features as of Phase 2: `wealth`, `accounts`, `debts`, `settings`,
+`onboarding`. Phase 3 adds `insights`, Phase 5 adds `capture`.
+
+### The activity/FX split
+
+The decomposition the whole app rests on, for balances `B` and rates `R` at
+each end of the period:
+
+```
+  activity = Σ (B₁ − B₀) × R₁     what you moved, at today's prices
+  fx       = Σ B₀ × (R₁ − R₀)     what the market did to what you had
+```
+
+The cross term cancels, so these sum exactly to `Σ B₁R₁ − Σ B₀R₀`. That
+identity is asserted in `net_worth_test.dart` rather than assumed: a split that
+does not reconcile would misattribute a loss the user then acts on. Activity is
+valued at *today's* rates on purpose — it answers "what is the money I moved
+worth now", which is the question someone planning a transfer is asking.
+
+An account appearing only in the closing set counts wholly as activity, never
+as a market gain: recording an account you already owned must not look like the
+market handed you money.
 
 ---
 
@@ -279,6 +299,7 @@ thresholds are tested.
 | ~~Categorical colour~~ | **Closed.** `AppCategoryColors`, five tonal teal steps plus a neutral tail — see §6. The specimen's own seven-step ramp was measured and rejected. |
 | Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
 | Source designs contradict the written system | The generated screens use `rounded-full` 60 times (the system forbids pill buttons) and `rounded-xl` = 12px for cards (the system fixes cards at 16px), and apply `font-label-mono` to prose — mono is the most-used font class in the export, though it is specified for figures only. The written system wins; the theme follows it. |
-| Theme/locale persistence | Still in memory. The `settings` table and its DAO now exist, so this is a small wiring change; home currency and digit style already persist through it. |
+| Theme/locale persistence | Still in memory. Home currency and digit style persist; theme and locale reset on cold start. |
+| Widget tests avoid the database | Drift's stream machinery leaves timers pending after teardown, tripping the test binding's `!timersPending` assertion and wedging every later test in the file. Widget tests stub the data providers instead; the DAOs are covered separately against a real in-memory database. |
 | `drift_dev schema dump` | Broken against drift 2.34.x. Resolve before the first migration. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |

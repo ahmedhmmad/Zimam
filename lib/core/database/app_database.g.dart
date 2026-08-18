@@ -3,7 +3,8 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
+class $AccountsTable extends Accounts
+    with TableInfo<$AccountsTable, AccountRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -157,7 +158,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   static const String $name = 'accounts';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Account> instance, {
+    Insertable<AccountRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -245,9 +246,9 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Account map(Map<String, dynamic> data, {String? tablePrefix}) {
+  AccountRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Account(
+    return AccountRow(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -301,7 +302,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   }
 }
 
-class Account extends DataClass implements Insertable<Account> {
+class AccountRow extends DataClass implements Insertable<AccountRow> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -327,7 +328,7 @@ class Account extends DataClass implements Insertable<Account> {
   /// Archived accounts stay in history and drop out of net worth. Distinct
   /// from [deletedAt]: archiving is a normal act, deleting is a correction.
   final bool isArchived;
-  const Account({
+  const AccountRow({
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -389,12 +390,12 @@ class Account extends DataClass implements Insertable<Account> {
     );
   }
 
-  factory Account.fromJson(
+  factory AccountRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Account(
+    return AccountRow(
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -426,7 +427,7 @@ class Account extends DataClass implements Insertable<Account> {
     };
   }
 
-  Account copyWith({
+  AccountRow copyWith({
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -438,7 +439,7 @@ class Account extends DataClass implements Insertable<Account> {
     Value<int?> colorArgb = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     bool? isArchived,
-  }) => Account(
+  }) => AccountRow(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -451,8 +452,8 @@ class Account extends DataClass implements Insertable<Account> {
     notes: notes.present ? notes.value : this.notes,
     isArchived: isArchived ?? this.isArchived,
   );
-  Account copyWithCompanion(AccountsCompanion data) {
-    return Account(
+  AccountRow copyWithCompanion(AccountsCompanion data) {
+    return AccountRow(
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -475,7 +476,7 @@ class Account extends DataClass implements Insertable<Account> {
 
   @override
   String toString() {
-    return (StringBuffer('Account(')
+    return (StringBuffer('AccountRow(')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -508,7 +509,7 @@ class Account extends DataClass implements Insertable<Account> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Account &&
+      (other is AccountRow &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
@@ -522,7 +523,7 @@ class Account extends DataClass implements Insertable<Account> {
           other.isArchived == this.isArchived);
 }
 
-class AccountsCompanion extends UpdateCompanion<Account> {
+class AccountsCompanion extends UpdateCompanion<AccountRow> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -566,7 +567,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
        name = Value(name),
        currencyCode = Value(currencyCode),
        type = Value(type);
-  static Insertable<Account> custom({
+  static Insertable<AccountRow> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -689,7 +690,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
 }
 
 class $BalanceSnapshotsTable extends BalanceSnapshots
-    with TableInfo<$BalanceSnapshotsTable, BalanceSnapshot> {
+    with TableInfo<$BalanceSnapshotsTable, BalanceSnapshotRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -817,7 +818,7 @@ class $BalanceSnapshotsTable extends BalanceSnapshots
   static const String $name = 'balance_snapshots';
   @override
   VerificationContext validateIntegrity(
-    Insertable<BalanceSnapshot> instance, {
+    Insertable<BalanceSnapshotRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -897,9 +898,9 @@ class $BalanceSnapshotsTable extends BalanceSnapshots
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  BalanceSnapshot map(Map<String, dynamic> data, {String? tablePrefix}) {
+  BalanceSnapshotRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return BalanceSnapshot(
+    return BalanceSnapshotRow(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -945,7 +946,8 @@ class $BalanceSnapshotsTable extends BalanceSnapshots
   }
 }
 
-class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
+class BalanceSnapshotRow extends DataClass
+    implements Insertable<BalanceSnapshotRow> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -965,7 +967,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
   /// Serialised [SnapshotSource] — whether the user typed this or a
   /// notification suggested it. Phase 5 needs to tell them apart.
   final String source;
-  const BalanceSnapshot({
+  const BalanceSnapshotRow({
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -1009,12 +1011,12 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
     );
   }
 
-  factory BalanceSnapshot.fromJson(
+  factory BalanceSnapshotRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return BalanceSnapshot(
+    return BalanceSnapshotRow(
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -1042,7 +1044,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
     };
   }
 
-  BalanceSnapshot copyWith({
+  BalanceSnapshotRow copyWith({
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -1052,7 +1054,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
     String? currencyCode,
     DateTime? observedAt,
     String? source,
-  }) => BalanceSnapshot(
+  }) => BalanceSnapshotRow(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -1063,8 +1065,8 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
     observedAt: observedAt ?? this.observedAt,
     source: source ?? this.source,
   );
-  BalanceSnapshot copyWithCompanion(BalanceSnapshotsCompanion data) {
-    return BalanceSnapshot(
+  BalanceSnapshotRow copyWithCompanion(BalanceSnapshotsCompanion data) {
+    return BalanceSnapshotRow(
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -1085,7 +1087,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
 
   @override
   String toString() {
-    return (StringBuffer('BalanceSnapshot(')
+    return (StringBuffer('BalanceSnapshotRow(')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -1114,7 +1116,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is BalanceSnapshot &&
+      (other is BalanceSnapshotRow &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
@@ -1126,7 +1128,7 @@ class BalanceSnapshot extends DataClass implements Insertable<BalanceSnapshot> {
           other.source == this.source);
 }
 
-class BalanceSnapshotsCompanion extends UpdateCompanion<BalanceSnapshot> {
+class BalanceSnapshotsCompanion extends UpdateCompanion<BalanceSnapshotRow> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -1166,7 +1168,7 @@ class BalanceSnapshotsCompanion extends UpdateCompanion<BalanceSnapshot> {
        currencyCode = Value(currencyCode),
        observedAt = Value(observedAt),
        source = Value(source);
-  static Insertable<BalanceSnapshot> custom({
+  static Insertable<BalanceSnapshotRow> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -3713,10 +3715,10 @@ typedef $$AccountsTableUpdateCompanionBuilder =
     });
 
 final class $$AccountsTableReferences
-    extends BaseReferences<_$AppDatabase, $AccountsTable, Account> {
+    extends BaseReferences<_$AppDatabase, $AccountsTable, AccountRow> {
   $$AccountsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$BalanceSnapshotsTable, List<BalanceSnapshot>>
+  static MultiTypedResultKey<$BalanceSnapshotsTable, List<BalanceSnapshotRow>>
   _balanceSnapshotsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.balanceSnapshots,
     aliasName: 'accounts__id__balance_snapshots__account_id',
@@ -3971,14 +3973,14 @@ class $$AccountsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $AccountsTable,
-          Account,
+          AccountRow,
           $$AccountsTableFilterComposer,
           $$AccountsTableOrderingComposer,
           $$AccountsTableAnnotationComposer,
           $$AccountsTableCreateCompanionBuilder,
           $$AccountsTableUpdateCompanionBuilder,
-          (Account, $$AccountsTableReferences),
-          Account,
+          (AccountRow, $$AccountsTableReferences),
+          AccountRow,
           PrefetchHooks Function({bool balanceSnapshotsRefs})
         > {
   $$AccountsTableTableManager(_$AppDatabase db, $AccountsTable table)
@@ -4067,9 +4069,9 @@ class $$AccountsTableTableManager
                 return [
                   if (balanceSnapshotsRefs)
                     await $_getPrefetchedData<
-                      Account,
+                      AccountRow,
                       $AccountsTable,
-                      BalanceSnapshot
+                      BalanceSnapshotRow
                     >(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
@@ -4095,14 +4097,14 @@ typedef $$AccountsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $AccountsTable,
-      Account,
+      AccountRow,
       $$AccountsTableFilterComposer,
       $$AccountsTableOrderingComposer,
       $$AccountsTableAnnotationComposer,
       $$AccountsTableCreateCompanionBuilder,
       $$AccountsTableUpdateCompanionBuilder,
-      (Account, $$AccountsTableReferences),
-      Account,
+      (AccountRow, $$AccountsTableReferences),
+      AccountRow,
       PrefetchHooks Function({bool balanceSnapshotsRefs})
     >;
 typedef $$BalanceSnapshotsTableCreateCompanionBuilder =
@@ -4134,7 +4136,11 @@ typedef $$BalanceSnapshotsTableUpdateCompanionBuilder =
 
 final class $$BalanceSnapshotsTableReferences
     extends
-        BaseReferences<_$AppDatabase, $BalanceSnapshotsTable, BalanceSnapshot> {
+        BaseReferences<
+          _$AppDatabase,
+          $BalanceSnapshotsTable,
+          BalanceSnapshotRow
+        > {
   $$BalanceSnapshotsTableReferences(
     super.$_db,
     super.$_table,
@@ -4373,14 +4379,14 @@ class $$BalanceSnapshotsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $BalanceSnapshotsTable,
-          BalanceSnapshot,
+          BalanceSnapshotRow,
           $$BalanceSnapshotsTableFilterComposer,
           $$BalanceSnapshotsTableOrderingComposer,
           $$BalanceSnapshotsTableAnnotationComposer,
           $$BalanceSnapshotsTableCreateCompanionBuilder,
           $$BalanceSnapshotsTableUpdateCompanionBuilder,
-          (BalanceSnapshot, $$BalanceSnapshotsTableReferences),
-          BalanceSnapshot,
+          (BalanceSnapshotRow, $$BalanceSnapshotsTableReferences),
+          BalanceSnapshotRow,
           PrefetchHooks Function({bool accountId})
         > {
   $$BalanceSnapshotsTableTableManager(
@@ -4503,14 +4509,14 @@ typedef $$BalanceSnapshotsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $BalanceSnapshotsTable,
-      BalanceSnapshot,
+      BalanceSnapshotRow,
       $$BalanceSnapshotsTableFilterComposer,
       $$BalanceSnapshotsTableOrderingComposer,
       $$BalanceSnapshotsTableAnnotationComposer,
       $$BalanceSnapshotsTableCreateCompanionBuilder,
       $$BalanceSnapshotsTableUpdateCompanionBuilder,
-      (BalanceSnapshot, $$BalanceSnapshotsTableReferences),
-      BalanceSnapshot,
+      (BalanceSnapshotRow, $$BalanceSnapshotsTableReferences),
+      BalanceSnapshotRow,
       PrefetchHooks Function({bool accountId})
     >;
 typedef $$DebtsTableCreateCompanionBuilder =

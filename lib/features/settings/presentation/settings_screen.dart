@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/fx/fx_provider_client.dart';
+import '../../../core/money/money_formatter.dart';
+import '../../../core/providers.dart';
 import '../../../core/settings/app_preferences.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../l10n/l10n.dart';
+import '../../accounts/presentation/currency_picker.dart';
 
-/// Language and appearance, plus the standing statement about where data lives.
+/// Money, language and appearance, plus the standing statement about where
+/// data lives.
 ///
-/// Phase 1 adds home currency here; Phase 6 adds "delete all my data".
+/// Phase 6 adds "delete all my data" here.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -17,12 +22,68 @@ class SettingsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final locale = ref.watch(localeProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final home = ref.watch(homeCurrencyProvider).value;
+    final digits = ref.watch(digitStyleProvider).value ?? DigitStyle.western;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: AppSpacing.lg),
         children: [
+          _SectionHeader(l10n.settingsMoney),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+            ),
+            title: Text(l10n.settingsHomeCurrency),
+            subtitle: Text(
+              home == null ? '—' : '${home.code} · ${home.englishName}',
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              final picked = await CurrencyPicker.show(
+                context,
+                selected: home,
+              );
+              if (picked != null) {
+                await ref.read(settingsDaoProvider).setHomeCurrency(picked);
+              }
+            },
+          ),
+
+          // Numerals are a separate choice from language, deliberately —
+          // plenty of people read Arabic prose and expect Western figures.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.xs,
+              AppSpacing.md,
+              AppSpacing.xs,
+            ),
+            child: Row(
+              children: [
+                Expanded(child: Text(l10n.settingsDigitStyle)),
+                SegmentedButton<DigitStyle>(
+                  segments: [
+                    ButtonSegment(
+                      value: DigitStyle.western,
+                      label: Text(l10n.settingsDigitStyleWestern),
+                    ),
+                    ButtonSegment(
+                      value: DigitStyle.arabicIndic,
+                      label: Text(l10n.settingsDigitStyleArabicIndic),
+                    ),
+                  ],
+                  selected: {digits},
+                  showSelectedIcon: false,
+                  onSelectionChanged: (s) =>
+                      ref.read(settingsDaoProvider).setDigitStyle(s.first),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.sm),
           _SectionHeader(l10n.settingsLanguage),
           _ChoiceTile(
             label: l10n.settingsLanguageSystem,
@@ -79,6 +140,20 @@ class SettingsScreen extends ConsumerWidget {
                     const SizedBox(height: AppSpacing.xs),
                     Text(
                       l10n.settingsPrivacyBody,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const Divider(height: AppSpacing.lg),
+                    Text(
+                      l10n.settingsRatesAttribution,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    // Required by the provider's CC BY-SA licence. Do not
+                    // remove — see OpenErApiClient.attribution.
+                    Text(
+                      OpenErApiClient.attribution,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

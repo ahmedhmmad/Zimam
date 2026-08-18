@@ -39,5 +39,84 @@
   "settingsPrivacyTitle": "بياناتك تبقى على هذا الجهاز",
   "settingsPrivacyBody": "يحفظ تطبيق زمام أرصدتك وديونك على هذا الهاتف فقط. لا يُرفع شيء إلى الإنترنت، ولا يوجد حساب لتسجيل الدخول.",
 
-  "comingLater": "لم تُبنَ هذه الميزة بعد."
+  "comingLater": "لم تُبنَ هذه الميزة بعد.",
+
+  "settingsMoney": "المال",
+  "settingsHomeCurrency": "العملة الأساسية",
+  "settingsDigitStyle": "الأرقام",
+  "settingsDigitStyleWestern": "123",
+  "settingsDigitStyleArabicIndic": "١٢٣",
+  "settingsRatesAttribution": "أسعار الصرف",
+
+  "netWorthLabel": "صافي الثروة · جميع الحسابات",
+  "changeFromActivity": "من نشاطك",
+  "changeFromRates": "من أسعار الصرف",
+  "changeWindow": "آخر {days} يومًا",
+  "@changeWindow": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "compositionTitle": "أين توجد أموالك",
+  "compositionAccounts": "{count, plural, =1{حساب واحد} =2{حسابان} few{{count} حسابات} other{{count} حسابًا}}",
+  "@compositionAccounts": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "ratesUnavailable": "لم تُنزَّل أسعار الصرف بعد",
+  "ratesUnavailableBody": "اتصل بالإنترنت مرة واحدة، وسيواصل زمام العمل دون اتصال بعد ذلك.",
+  "accountsExcluded": "{count, plural, =1{حساب واحد غير مُحتسَب — لا يوجد سعر صرف له بعد} =2{حسابان غير محتسبَين — لا توجد أسعار صرف لهما بعد} few{{count} حسابات غير محتسبة — لا توجد أسعار صرف لها بعد} other{{count} حسابًا غير محتسب — لا توجد أسعار صرف لها بعد}}",
+  "@accountsExcluded": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "ratesStale": "عمر الأسعار {days} يومًا",
+  "@ratesStale": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "accountAdd": "إضافة حساب",
+  "accountEdit": "تعديل الحساب",
+  "accountName": "اسم الحساب",
+  "accountNameHint": "مثال: مدخرات رئيسية",
+  "accountInstitution": "المؤسسة",
+  "accountInstitutionHint": "مثال: بنك الاتحاد",
+  "accountCurrency": "العملة",
+  "accountType": "النوع",
+  "accountBalance": "الرصيد الحالي",
+  "accountNotes": "ملاحظة",
+  "accountNotesHint": "اختياري",
+  "accountSave": "حفظ",
+  "accountUpdateBalance": "تحديث الرصيد",
+  "accountArchive": "أرشفة",
+  "accountUnarchive": "استعادة",
+  "accountArchived": "مؤرشف",
+  "accountLastUpdated": "آخر تحديث قبل {days} يومًا",
+  "@accountLastUpdated": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "accountUpdatedToday": "حُدّث اليوم",
+  "accountNeverUpdated": "لم يُحدَّث قط",
+  "accountSubtotal": "المجموع {amount}",
+  "@accountSubtotal": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+
+  "accountTypeBank": "بنك",
+  "accountTypeCash": "نقد",
+  "accountTypeWallet": "محفظة",
+  "accountTypeCard": "بطاقة",
+  "accountTypeInvestment": "استثمار",
+  "accountTypeOther": "أخرى",
+
+  "validationRequired": "مطلوب",
+  "validationAmount": "أدخل مبلغًا صحيحًا",
+  "currencySearchHint": "ابحث عن عملة",
+
+  "onboardingCurrencyTitle": "بأي عملة تفكّر؟",
+  "onboardingCurrencyBody": "ستُعرض كل الأرصدة بهذه العملة، مهما كانت العملة المحفوظة بها فعليًا. يمكنك تغييرها لاحقًا.",
+  "onboardingAccountTitle": "أضف أول حساب",
+  "onboardingAccountBody": "بنك أو محفظة أو نقد. يمكنك إضافة البقية لاحقًا.",
+  "onboardingPrivacyTitle": "بياناتك تبقى على هذا الهاتف",
+  "onboardingPrivacyBody": "يحفظ زمام أرصدتك وديونك في التخزين المحلي على هذا الجهاز. لا يوجد حساب تنشئه، ولا يُرفع شيء، ولا يمكن لأحد غيرك رؤيته. الشيء الوحيد الذي ينزّله زمام هو أسعار الصرف.",
+  "onboardingStart": "ابدأ",
+  "onboardingContinue": "متابعة",
+  "onboardingSkip": "تخطٍّ الآن"
 }

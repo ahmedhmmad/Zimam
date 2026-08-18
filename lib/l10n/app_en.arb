@@ -60,5 +60,93 @@
   "comingLater": "This is not built yet.",
   "@comingLater": {
     "description": "Temporary notice shown when tapping a placeholder action during early development."
-  }
+  },
+
+  "settingsMoney": "Money",
+  "settingsHomeCurrency": "Home currency",
+  "settingsDigitStyle": "Numerals",
+  "settingsDigitStyleWestern": "123",
+  "settingsDigitStyleArabicIndic": "١٢٣",
+  "settingsRatesAttribution": "Exchange rates",
+
+  "netWorthLabel": "NET WORTH · ALL ACCOUNTS",
+  "@netWorthLabel": {
+    "description": "Overline above the hero figure on the Wealth screen."
+  },
+  "changeFromActivity": "From your activity",
+  "@changeFromActivity": {
+    "description": "Label for the portion of net-worth change caused by the user moving money."
+  },
+  "changeFromRates": "From exchange rates",
+  "@changeFromRates": {
+    "description": "Label for the portion of net-worth change caused by currency movement alone."
+  },
+  "changeWindow": "last {days} days",
+  "@changeWindow": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "compositionTitle": "Where your money sits",
+  "compositionAccounts": "{count, plural, =1{1 account} other{{count} accounts}}",
+  "@compositionAccounts": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "ratesUnavailable": "Exchange rates not downloaded yet",
+  "ratesUnavailableBody": "Connect to the internet once and Zimam will keep working offline from then on.",
+  "accountsExcluded": "{count, plural, =1{1 account is not included — no exchange rate for it yet} other{{count} accounts are not included — no exchange rates for them yet}}",
+  "@accountsExcluded": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "ratesStale": "Rates are {days} days old",
+  "@ratesStale": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "accountAdd": "Add account",
+  "accountEdit": "Edit account",
+  "accountName": "Account name",
+  "accountNameHint": "e.g. Main savings",
+  "accountInstitution": "Institution",
+  "accountInstitutionHint": "e.g. Bank al Etihad",
+  "accountCurrency": "Currency",
+  "accountType": "Type",
+  "accountBalance": "Current balance",
+  "accountNotes": "Note",
+  "accountNotesHint": "Optional",
+  "accountSave": "Save",
+  "accountUpdateBalance": "Update balance",
+  "accountArchive": "Archive",
+  "accountUnarchive": "Restore",
+  "accountArchived": "Archived",
+  "accountLastUpdated": "Updated {days} days ago",
+  "@accountLastUpdated": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "accountUpdatedToday": "Updated today",
+  "accountNeverUpdated": "Never updated",
+  "accountSubtotal": "subtotal {amount}",
+  "@accountSubtotal": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+
+  "accountTypeBank": "Bank",
+  "accountTypeCash": "Cash",
+  "accountTypeWallet": "Wallet",
+  "accountTypeCard": "Card",
+  "accountTypeInvestment": "Investment",
+  "accountTypeOther": "Other",
+
+  "validationRequired": "Required",
+  "validationAmount": "Enter a valid amount",
+  "currencySearchHint": "Search currencies",
+
+  "onboardingCurrencyTitle": "Which currency do you think in?",
+  "onboardingCurrencyBody": "Every balance will be shown in this one, whatever currency it is actually held in. You can change it later.",
+  "onboardingAccountTitle": "Add your first account",
+  "onboardingAccountBody": "A bank, a wallet, or cash. You can add the rest afterwards.",
+  "onboardingPrivacyTitle": "Your data stays on this phone",
+  "onboardingPrivacyBody": "Zimam keeps your balances and debts in local storage on this device. There is no account to create, nothing is uploaded, and no one else can see it. The only thing Zimam downloads is exchange rates.",
+  "onboardingStart": "Start",
+  "onboardingContinue": "Continue",
+  "onboardingSkip": "Skip for now"
 }
