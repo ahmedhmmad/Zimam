@@ -19,6 +19,8 @@ class SettingsDao extends DatabaseAccessor<AppDatabase> with _$SettingsDaoMixin 
 
   static const _homeCurrency = 'home_currency';
   static const _digitStyle = 'digit_style';
+  static const _dismissedInsights = 'dismissed_insights';
+  static const _scatteredThreshold = 'scattered_threshold_minor';
 
   /// The currency every balance is reported in — the app's central premise.
   ///
@@ -58,6 +60,52 @@ class SettingsDao extends DatabaseAccessor<AppDatabase> with _$SettingsDaoMixin 
       orElse: () => DigitStyle.western,
     ),
   );
+
+  /// Signatures of insight cards the user has dismissed.
+  ///
+  /// Signatures rather than rule names: a card stays dismissed while the
+  /// situation behind it stays roughly the same, and earns another appearance
+  /// once it has materially changed. See `Insight.signature`.
+  Future<Set<String>> dismissedInsights() async =>
+      _decodeSignatures(await _read(_dismissedInsights));
+
+  Stream<Set<String>> watchDismissedInsights() =>
+      _watch(_dismissedInsights).map(_decodeSignatures);
+
+  /// Signatures are newline-separated. Newline rather than comma because a
+  /// signature embeds a currency code and numbers, and a separator that could
+  /// ever appear inside one would silently split a key in half.
+  static Set<String> _decodeSignatures(String? raw) {
+    if (raw == null || raw.isEmpty) return {};
+    return raw.split('\n').where((s) => s.isNotEmpty).toSet();
+  }
+
+  Future<void> dismissInsight(String signature) async {
+    final current = await dismissedInsights();
+    // Capped so a long-lived install cannot accumulate an unbounded row.
+    // Oldest entries fall off; the worst case is a card the user dismissed
+    // months ago reappearing once.
+    final updated = [...current, signature];
+    final trimmed = updated.length > 200
+        ? updated.sublist(updated.length - 200)
+        : updated;
+    await _write(_dismissedInsights, trimmed.join('\n'));
+  }
+
+  Future<void> clearDismissedInsights() => _write(_dismissedInsights, '');
+
+  /// The balance below which a holding counts as "small", in minor units of
+  /// the home currency. Null until the user sets one.
+  Future<int?> scatteredThresholdMinor() async {
+    final raw = await _read(_scatteredThreshold);
+    return raw == null ? null : int.tryParse(raw);
+  }
+
+  Future<void> setScatteredThresholdMinor(int minorUnits) =>
+      _write(_scatteredThreshold, minorUnits.toString());
+
+  Stream<int?> watchScatteredThresholdMinor() =>
+      _watch(_scatteredThreshold).map((raw) => raw == null ? null : int.tryParse(raw));
 
   Future<String?> _read(String key) async {
     final row = await (select(

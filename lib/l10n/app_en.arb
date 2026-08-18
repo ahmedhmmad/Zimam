@@ -148,5 +148,47 @@
   "onboardingPrivacyBody": "Zimam keeps your balances and debts in local storage on this device. There is no account to create, nothing is uploaded, and no one else can see it. The only thing Zimam downloads is exchange rates.",
   "onboardingStart": "Start",
   "onboardingContinue": "Continue",
-  "onboardingSkip": "Skip for now"
+  "onboardingSkip": "Skip for now",
+
+  "insightsTitle": "Insights",
+
+  "insightFxDriftTitleLoss": "Exchange rates moved your total down",
+  "insightFxDriftTitleGain": "Exchange rates moved your total up",
+  "insightFxDriftBody": "{amount} over the last {days} days, without you moving anything.",
+  "@insightFxDriftBody": {
+    "placeholders": { "amount": { "type": "String" }, "days": { "type": "int" } }
+  },
+  "insightFxDriftAction": "See breakdown",
+
+  "insightConcentrationTitle": "{percent} of your wealth is in one currency",
+  "@insightConcentrationTitle": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "insightConcentrationBody": "{amount} is held in {code}.",
+  "@insightConcentrationBody": {
+    "placeholders": { "amount": { "type": "String" }, "code": { "type": "String" } }
+  },
+  "insightConcentrationAction": "See breakdown",
+
+  "insightScatteredTitle": "{accounts, plural, =1{1 small balance} other{{accounts} small balances}} across {institutions, plural, =1{1 institution} other{{institutions} institutions}}",
+  "@insightScatteredTitle": {
+    "placeholders": { "accounts": { "type": "int" }, "institutions": { "type": "int" } }
+  },
+  "insightScatteredBody": "{amount} sitting in accounts under {threshold}.",
+  "@insightScatteredBody": {
+    "placeholders": { "amount": { "type": "String" }, "threshold": { "type": "String" } }
+  },
+  "insightScatteredAction": "Review them",
+
+  "insightDormancyTitle": "{count, plural, =1{1 balance has not been updated} other{{count} balances have not been updated}} in over {days} days",
+  "@insightDormancyTitle": {
+    "placeholders": { "count": { "type": "int" }, "days": { "type": "int" } }
+  },
+  "insightDormancyBody": "{amount} is counted at figures you last confirmed a while ago.",
+  "@insightDormancyBody": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "insightDormancyAction": "Update balances",
+
+  "insightDismiss": "Dismiss"
 }

@@ -118,5 +118,47 @@
   "onboardingPrivacyBody": "يحفظ زمام أرصدتك وديونك في التخزين المحلي على هذا الجهاز. لا يوجد حساب تنشئه، ولا يُرفع شيء، ولا يمكن لأحد غيرك رؤيته. الشيء الوحيد الذي ينزّله زمام هو أسعار الصرف.",
   "onboardingStart": "ابدأ",
   "onboardingContinue": "متابعة",
-  "onboardingSkip": "تخطٍّ الآن"
+  "onboardingSkip": "تخطٍّ الآن",
+
+  "insightsTitle": "نظرات",
+
+  "insightFxDriftTitleLoss": "أسعار الصرف خفضت إجماليك",
+  "insightFxDriftTitleGain": "أسعار الصرف رفعت إجماليك",
+  "insightFxDriftBody": "{amount} خلال آخر {days} يومًا، دون أن تحرّك شيئًا.",
+  "@insightFxDriftBody": {
+    "placeholders": { "amount": { "type": "String" }, "days": { "type": "int" } }
+  },
+  "insightFxDriftAction": "عرض التفاصيل",
+
+  "insightConcentrationTitle": "{percent} من ثروتك في عملة واحدة",
+  "@insightConcentrationTitle": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "insightConcentrationBody": "{amount} محفوظة بعملة {code}.",
+  "@insightConcentrationBody": {
+    "placeholders": { "amount": { "type": "String" }, "code": { "type": "String" } }
+  },
+  "insightConcentrationAction": "عرض التفاصيل",
+
+  "insightScatteredTitle": "{accounts, plural, =1{رصيد صغير واحد} =2{رصيدان صغيران} few{{accounts} أرصدة صغيرة} other{{accounts} رصيدًا صغيرًا}} في {institutions, plural, =1{مؤسسة واحدة} =2{مؤسستين} few{{institutions} مؤسسات} other{{institutions} مؤسسة}}",
+  "@insightScatteredTitle": {
+    "placeholders": { "accounts": { "type": "int" }, "institutions": { "type": "int" } }
+  },
+  "insightScatteredBody": "{amount} في حسابات أقل من {threshold}.",
+  "@insightScatteredBody": {
+    "placeholders": { "amount": { "type": "String" }, "threshold": { "type": "String" } }
+  },
+  "insightScatteredAction": "مراجعتها",
+
+  "insightDormancyTitle": "{count, plural, =1{رصيد واحد لم يُحدَّث} =2{رصيدان لم يُحدَّثا} few{{count} أرصدة لم تُحدَّث} other{{count} رصيدًا لم يُحدَّث}} منذ أكثر من {days} يومًا",
+  "@insightDormancyTitle": {
+    "placeholders": { "count": { "type": "int" }, "days": { "type": "int" } }
+  },
+  "insightDormancyBody": "{amount} محتسبة بأرقام أكّدتها آخر مرة منذ فترة.",
+  "@insightDormancyBody": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "insightDormancyAction": "تحديث الأرصدة",
+
+  "insightDismiss": "إخفاء"
 }

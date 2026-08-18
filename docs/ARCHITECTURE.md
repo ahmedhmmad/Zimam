@@ -90,8 +90,36 @@ lib/
     generated/                   gen-l10n output (git-ignored)
 ```
 
-Features as of Phase 2: `wealth`, `accounts`, `debts`, `settings`,
-`onboarding`. Phase 3 adds `insights`, Phase 5 adds `capture`.
+Features as of Phase 3: `wealth`, `accounts`, `debts`, `settings`,
+`onboarding`, `insights`. Phase 5 adds `capture`.
+
+### Insight rules
+
+Rules are plain synchronous functions over an `InsightContext` that is
+assembled once and handed to all of them. They cannot reach the database,
+cannot perform I/O, and cannot disagree about the numbers — which is what
+makes the whole feature testable from seeded data rather than by looking at a
+screen. Currency conversion happens before the engine runs, injected as
+`homeValueOf`, so the rules stay pure.
+
+Adding a rule means writing an `InsightRule` and adding it to
+`InsightEngine.defaultRules`. Nothing else changes except the sealed
+`InsightDetails` subtype, which the compiler then demands the card widget
+handle.
+
+Ranking is by **materiality — the share of net worth at stake**, not by a raw
+amount. Rules measure quite different things, and a fraction lets "2% moved on
+rates" and "2% is sitting forgotten" compete honestly; an amount would let
+whichever rule happens to touch bigger numbers always win.
+
+Dismissal is keyed on a **signature that buckets the underlying figure**, not
+on the rule name. Keyed on the rule alone a card would be silenced forever;
+keyed on the exact value it would return on every trivial fluctuation. So
+dismissing "68% in one currency" stays dismissed at 71% and reappears at 90%.
+
+Rules state facts and never give advice. "68% of your wealth is in one
+currency" is an observation the user may not have made; "you should diversify"
+is a recommendation this app is in no position to make.
 
 ### The activity/FX split
 

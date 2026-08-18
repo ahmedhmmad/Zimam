@@ -11,6 +11,8 @@ import '../../../core/widgets/destination_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/money_text.dart';
 import '../../../l10n/l10n.dart';
+import '../../insights/application/insights_providers.dart';
+import '../../insights/presentation/insight_card.dart';
 import '../application/wealth_providers.dart';
 import '../domain/net_worth.dart';
 import 'composition_bar.dart';
@@ -94,6 +96,9 @@ class _WealthBody extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
           if (wealth.change != null) _ChangeCard(change: wealth.change!),
 
+          // ---- What is worth noticing --------------------------------------
+          const _Insights(),
+
           // ---- What it is made of ------------------------------------------
           const SizedBox(height: AppSpacing.lg),
           Text(l10n.compositionTitle, style: theme.textTheme.titleLarge),
@@ -107,6 +112,34 @@ class _WealthBody extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The ranked insight cards.
+///
+/// Silent when there is nothing worth saying — an empty "Insights" heading
+/// with nothing under it teaches people to stop looking at this part of the
+/// screen.
+class _Insights extends ConsumerWidget {
+  const _Insights();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final insights = ref.watch(insightsProvider).value ?? const [];
+    if (insights.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: AppSpacing.lg),
+        Text(
+          context.l10n.insightsTitle,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        for (final insight in insights) InsightCard(insight: insight),
+      ],
     );
   }
 }
