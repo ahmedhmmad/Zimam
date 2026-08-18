@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/fx/fx_provider_client.dart';
 import '../../../core/money/money_formatter.dart';
 import '../../../core/providers.dart';
 import '../../../core/settings/app_preferences.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/router/app_router.dart';
 import '../../../l10n/l10n.dart';
+import '../../capture/application/capture_providers.dart';
 import '../../accounts/presentation/currency_picker.dart';
 
 /// Money, language and appearance, plus the standing statement about where
@@ -122,6 +125,23 @@ class SettingsScreen extends ConsumerWidget {
             selected: themeMode == ThemeMode.dark,
             onTap: () =>
                 ref.read(themeModeProvider.notifier).set(ThemeMode.dark),
+          ),
+
+          const SizedBox(height: AppSpacing.sm),
+          _SectionHeader(l10n.captureTitle),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.xxs,
+            ),
+            title: Text(l10n.captureSettingsEntry),
+            subtitle: Text(
+              ref.watch(capturePermissionProvider).value ?? false
+                  ? l10n.captureStatusOn
+                  : l10n.captureStatusOff,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push(AppRoutes.capture),
           ),
 
           const SizedBox(height: AppSpacing.lg),

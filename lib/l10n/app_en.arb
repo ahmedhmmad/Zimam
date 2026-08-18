@@ -237,5 +237,51 @@
   "debtsExcluded": "{count, plural, =1{1 debt is not included — no exchange rate for it yet} other{{count} debts are not included — no exchange rates for them yet}}",
   "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } },
 
-  "debtLockedAfterCreation": "Cannot be changed after recording"
+  "debtLockedAfterCreation": "Cannot be changed after recording",
+
+  "captureTitle": "Automatic balance capture",
+  "captureSettingsEntry": "Balance capture",
+  "captureStatusOn": "On",
+  "captureStatusOff": "Off",
+
+  "captureDisclosureHeading": "Zimam can read your bank notifications to save you typing",
+  "captureDisclosureWhatHeading": "What Zimam reads",
+  "captureDisclosureWhat": "If you turn this on, Android lets Zimam see the notifications other apps show you. Zimam looks at the app they came from and their text, so it can spot the ones that mention a balance or a transaction.",
+  "captureDisclosureWhereHeading": "Where it goes",
+  "captureDisclosureWhere": "Nowhere. Everything is read and matched on this phone, and stored only here. Zimam does not upload your notifications, and there is no account or server behind this app.",
+  "captureDisclosureControlHeading": "You stay in control",
+  "captureDisclosureControl": "Nothing is ever added to your accounts on its own. Anything Zimam recognises is offered as a suggestion for you to confirm or discard.",
+  "captureDisclosureRevokeHeading": "Turning it off",
+  "captureDisclosureRevoke": "You can revoke access at any time in Android Settings under Notification access, or from this screen. Zimam keeps working exactly as before, and you enter balances yourself.",
+  "captureDisclosureNoSms": "Zimam never reads your SMS messages and does not ask for that permission.",
+  "captureDisclosureAccept": "Continue to Android settings",
+  "captureDisclosureDecline": "Not now",
+
+  "captureEnabledTitle": "Capture is on",
+  "captureEnabledBody": "Suggestions will appear here when a notification mentions a balance.",
+  "captureDisabledTitle": "Capture is off",
+  "captureDisabledBody": "Turn it on to have balances read from your bank notifications instead of typing them.",
+  "captureTurnOn": "Turn on",
+  "captureTurnOff": "Turn off in Android settings",
+  "captureNotConnected": "Access is granted but Android has not started the service. Toggling it off and on in Android settings usually fixes this.",
+
+  "captureSuggestionsTitle": "Suggestions",
+  "captureSuggestionsEmpty": "No suggestions yet.",
+  "captureSuggestionFrom": "From {app}",
+  "@captureSuggestionFrom": { "placeholders": { "app": { "type": "String" } } },
+  "captureSuggestionBalance": "Reported balance",
+  "captureConfirm": "Add to account",
+  "captureReject": "Discard",
+  "captureChooseAccount": "Which account?",
+
+  "captureSamplesTitle": "Unrecognised notifications",
+  "captureSamplesBody": "These looked like they might be transactions but no rule matched them. You can send one, with the numbers and names removed, to help improve recognition.",
+  "captureSamplesEmpty": "Nothing unrecognised.",
+  "captureShare": "Help improve parsing",
+  "captureShareHeading": "This is exactly what would be sent",
+  "captureShareBody": "Every digit has been replaced and names removed. Nothing else about you or your phone is included. Sending is entirely optional.",
+  "captureShareConfirm": "Send this",
+  "captureShareCancel": "Cancel",
+  "captureShareSent": "Sent. Thank you.",
+  "captureShareNotAvailable": "Sharing is not available yet."
 }

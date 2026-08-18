@@ -90,8 +90,42 @@ lib/
     generated/                   gen-l10n output (git-ignored)
 ```
 
-Features as of Phase 4: `wealth`, `accounts`, `debts`, `settings`,
-`onboarding`, `insights`. Phase 5 adds `capture`.
+Features as of Phase 5: `wealth`, `accounts`, `debts`, `settings`,
+`onboarding`, `insights`, `capture`.
+
+### Notification capture
+
+The Android service does as little as possible: it extracts a package name,
+title and text and forwards them. It does not parse, store, judge or touch the
+network. Everything with judgement in it lives in Dart where it can be tested
+without a device, which matters here more than anywhere else because the input
+is arbitrary text written by third parties.
+
+**Nothing is ever written to an account automatically.** A match becomes a
+pending suggestion; the user confirms it against the original text, which is
+kept alongside so a figure always has provenance. Only a *reported balance*
+can be applied — a transaction amount alone would have to be added to a
+balance the app has not observed, which is arithmetic on a guess.
+
+The parser refuses far more than it accepts. No currency and no default, an
+ambiguous direction, a bare dollar sign, more precision than the currency has,
+a zero amount: all rejected. A plausible-looking wrong number is worse than
+none.
+
+**Prominent disclosure** is a full screen reached only from an explicit
+opt-in, and the app never opens Android's permission screen on its own. It
+names what is read, that nothing is uploaded, that suggestions are never
+applied automatically, and how to revoke. "Not now" carries the same visual
+weight as "Continue" — a decline path harder to find than the accept path is
+not a real choice.
+
+**No SMS.** No permission, no code path, and the manifest is asserted against
+it.
+
+Sharing an unrecognised sample is per-item, opt-in, and shows the exact
+redacted payload before asking. The redactor is written assuming it will miss
+things — it is a mechanical filter over prose in two languages — so it is the
+weakest of three safeguards, not the only one.
 
 ### Repayment cost drift
 

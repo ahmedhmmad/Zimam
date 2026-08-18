@@ -6,6 +6,7 @@ import '../../features/accounts/presentation/account_form_screen.dart';
 import '../../features/accounts/presentation/accounts_screen.dart';
 import '../../features/debts/presentation/debt_detail_screen.dart';
 import '../../features/debts/presentation/debt_form_screen.dart';
+import '../../features/capture/presentation/capture_screen.dart';
 import '../../features/debts/presentation/debts_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -23,6 +24,7 @@ abstract final class AppRoutes {
   static const accountForm = '/account';
   static const debtForm = '/debt';
   static const debtDetail = '/debt-detail';
+  static const capture = '/capture';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -96,6 +98,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.accountForm,
         builder: (context, state) =>
             AccountFormScreen(accountId: state.uri.queryParameters['id']),
+      ),
+      GoRoute(
+        path: AppRoutes.capture,
+        builder: (context, state) => const CaptureScreen(),
       ),
       GoRoute(
         path: AppRoutes.debtForm,

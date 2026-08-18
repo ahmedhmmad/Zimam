@@ -2,4 +2,5 @@
 <resources>
     <!-- Launcher and task-switcher name. Localised in values-ar. -->
     <string name="app_name">Zimam</string>
+    <string name="notification_service_label">Zimam balance capture</string>
 </resources>

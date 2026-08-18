@@ -207,5 +207,51 @@
   "debtsExcluded": "{count, plural, =1{دين واحد غير محتسب — لا يوجد سعر صرف له بعد} =2{دينان غير محتسبَين — لا توجد أسعار صرف لهما بعد} few{{count} ديون غير محتسبة — لا توجد أسعار صرف لها بعد} other{{count} دينًا غير محتسب — لا توجد أسعار صرف لها بعد}}",
   "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } },
 
-  "debtLockedAfterCreation": "لا يمكن تغييره بعد التسجيل"
+  "debtLockedAfterCreation": "لا يمكن تغييره بعد التسجيل",
+
+  "captureTitle": "التقاط الأرصدة تلقائيًا",
+  "captureSettingsEntry": "التقاط الأرصدة",
+  "captureStatusOn": "مفعّل",
+  "captureStatusOff": "متوقف",
+
+  "captureDisclosureHeading": "يمكن لزمام قراءة إشعارات بنكك ليوفّر عليك الإدخال اليدوي",
+  "captureDisclosureWhatHeading": "ما الذي يقرأه زمام",
+  "captureDisclosureWhat": "إذا فعّلت هذه الميزة، يسمح أندرويد لزمام برؤية الإشعارات التي تعرضها التطبيقات الأخرى. ينظر زمام في التطبيق الذي أرسلها وفي نصها، ليتعرّف على ما يذكر رصيدًا أو عملية.",
+  "captureDisclosureWhereHeading": "إلى أين تذهب",
+  "captureDisclosureWhere": "لا تذهب إلى أي مكان. تُقرأ وتُطابَق على هذا الهاتف وتُحفظ هنا فقط. لا يرفع زمام إشعاراتك، ولا يوجد حساب أو خادم خلف هذا التطبيق.",
+  "captureDisclosureControlHeading": "القرار يبقى لك",
+  "captureDisclosureControl": "لا يُضاف شيء إلى حساباتك من تلقاء نفسه. كل ما يتعرّف عليه زمام يُعرض عليك كاقتراح تؤكّده أو تتجاهله.",
+  "captureDisclosureRevokeHeading": "إيقاف الميزة",
+  "captureDisclosureRevoke": "يمكنك سحب الإذن في أي وقت من إعدادات أندرويد ضمن «الوصول إلى الإشعارات»، أو من هذه الشاشة. سيواصل زمام العمل كما هو، وتُدخل الأرصدة بنفسك.",
+  "captureDisclosureNoSms": "لا يقرأ زمام رسائلك النصية إطلاقًا ولا يطلب هذا الإذن.",
+  "captureDisclosureAccept": "المتابعة إلى إعدادات أندرويد",
+  "captureDisclosureDecline": "ليس الآن",
+
+  "captureEnabledTitle": "الالتقاط مفعّل",
+  "captureEnabledBody": "ستظهر الاقتراحات هنا عندما يذكر إشعارٌ رصيدًا.",
+  "captureDisabledTitle": "الالتقاط متوقف",
+  "captureDisabledBody": "فعّله لتُقرأ الأرصدة من إشعارات بنكك بدل إدخالها يدويًا.",
+  "captureTurnOn": "تفعيل",
+  "captureTurnOff": "الإيقاف من إعدادات أندرويد",
+  "captureNotConnected": "الإذن ممنوح لكن أندرويد لم يشغّل الخدمة. غالبًا يحلّ إيقافها وتشغيلها من إعدادات أندرويد المشكلة.",
+
+  "captureSuggestionsTitle": "الاقتراحات",
+  "captureSuggestionsEmpty": "لا توجد اقتراحات بعد.",
+  "captureSuggestionFrom": "من {app}",
+  "@captureSuggestionFrom": { "placeholders": { "app": { "type": "String" } } },
+  "captureSuggestionBalance": "الرصيد المذكور",
+  "captureConfirm": "إضافة إلى الحساب",
+  "captureReject": "تجاهل",
+  "captureChooseAccount": "أي حساب؟",
+
+  "captureSamplesTitle": "إشعارات غير معروفة",
+  "captureSamplesBody": "بدت هذه وكأنها عمليات لكن لم تطابقها أي قاعدة. يمكنك إرسال واحدة، بعد إزالة الأرقام والأسماء، للمساعدة في تحسين التعرّف.",
+  "captureSamplesEmpty": "لا يوجد شيء غير معروف.",
+  "captureShare": "ساعد في تحسين التحليل",
+  "captureShareHeading": "هذا بالضبط ما سيُرسل",
+  "captureShareBody": "استُبدل كل رقم وأُزيلت الأسماء. لا يُرسَل أي شيء آخر عنك أو عن هاتفك. الإرسال اختياري تمامًا.",
+  "captureShareConfirm": "إرسال هذا",
+  "captureShareCancel": "إلغاء",
+  "captureShareSent": "تم الإرسال. شكرًا لك.",
+  "captureShareNotAvailable": "المشاركة غير متاحة بعد."
 }
