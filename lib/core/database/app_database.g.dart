@@ -1274,7 +1274,7 @@ class BalanceSnapshotsCompanion extends UpdateCompanion<BalanceSnapshotRow> {
   }
 }
 
-class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
+class $DebtsTable extends Debts with TableInfo<$DebtsTable, DebtRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1464,7 +1464,7 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   static const String $name = 'debts';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Debt> instance, {
+    Insertable<DebtRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1587,9 +1587,9 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Debt map(Map<String, dynamic> data, {String? tablePrefix}) {
+  DebtRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Debt(
+    return DebtRow(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -1655,7 +1655,7 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   }
 }
 
-class Debt extends DataClass implements Insertable<Debt> {
+class DebtRow extends DataClass implements Insertable<DebtRow> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -1683,7 +1683,7 @@ class Debt extends DataClass implements Insertable<Debt> {
   final DateTime? dueOn;
   final DateTime? settledAt;
   final String? notes;
-  const Debt({
+  const DebtRow({
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -1754,12 +1754,12 @@ class Debt extends DataClass implements Insertable<Debt> {
     );
   }
 
-  factory Debt.fromJson(
+  factory DebtRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Debt(
+    return DebtRow(
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -1799,7 +1799,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     };
   }
 
-  Debt copyWith({
+  DebtRow copyWith({
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -1814,7 +1814,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     Value<DateTime?> dueOn = const Value.absent(),
     Value<DateTime?> settledAt = const Value.absent(),
     Value<String?> notes = const Value.absent(),
-  }) => Debt(
+  }) => DebtRow(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -1830,8 +1830,8 @@ class Debt extends DataClass implements Insertable<Debt> {
     settledAt: settledAt.present ? settledAt.value : this.settledAt,
     notes: notes.present ? notes.value : this.notes,
   );
-  Debt copyWithCompanion(DebtsCompanion data) {
-    return Debt(
+  DebtRow copyWithCompanion(DebtsCompanion data) {
+    return DebtRow(
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -1861,7 +1861,7 @@ class Debt extends DataClass implements Insertable<Debt> {
 
   @override
   String toString() {
-    return (StringBuffer('Debt(')
+    return (StringBuffer('DebtRow(')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -1900,7 +1900,7 @@ class Debt extends DataClass implements Insertable<Debt> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Debt &&
+      (other is DebtRow &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
@@ -1917,7 +1917,7 @@ class Debt extends DataClass implements Insertable<Debt> {
           other.notes == this.notes);
 }
 
-class DebtsCompanion extends UpdateCompanion<Debt> {
+class DebtsCompanion extends UpdateCompanion<DebtRow> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -1974,7 +1974,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
        homeCurrencyCode = Value(homeCurrencyCode),
        rateAtCreationScaled = Value(rateAtCreationScaled),
        createdOn = Value(createdOn);
-  static Insertable<Debt> custom({
+  static Insertable<DebtRow> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -2124,7 +2124,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
 }
 
 class $DebtPaymentsTable extends DebtPayments
-    with TableInfo<$DebtPaymentsTable, DebtPayment> {
+    with TableInfo<$DebtPaymentsTable, DebtPaymentRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -2259,7 +2259,7 @@ class $DebtPaymentsTable extends DebtPayments
   static const String $name = 'debt_payments';
   @override
   VerificationContext validateIntegrity(
-    Insertable<DebtPayment> instance, {
+    Insertable<DebtPaymentRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -2348,9 +2348,9 @@ class $DebtPaymentsTable extends DebtPayments
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  DebtPayment map(Map<String, dynamic> data, {String? tablePrefix}) {
+  DebtPaymentRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return DebtPayment(
+    return DebtPaymentRow(
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -2400,7 +2400,7 @@ class $DebtPaymentsTable extends DebtPayments
   }
 }
 
-class DebtPayment extends DataClass implements Insertable<DebtPayment> {
+class DebtPaymentRow extends DataClass implements Insertable<DebtPaymentRow> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -2414,7 +2414,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
   /// debt's own rate.
   final int rateAtPaymentScaled;
   final String? notes;
-  const DebtPayment({
+  const DebtPaymentRow({
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -2465,12 +2465,12 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
     );
   }
 
-  factory DebtPayment.fromJson(
+  factory DebtPaymentRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return DebtPayment(
+    return DebtPaymentRow(
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -2502,7 +2502,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
     };
   }
 
-  DebtPayment copyWith({
+  DebtPaymentRow copyWith({
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -2513,7 +2513,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
     DateTime? paidOn,
     int? rateAtPaymentScaled,
     Value<String?> notes = const Value.absent(),
-  }) => DebtPayment(
+  }) => DebtPaymentRow(
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -2525,8 +2525,8 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
     rateAtPaymentScaled: rateAtPaymentScaled ?? this.rateAtPaymentScaled,
     notes: notes.present ? notes.value : this.notes,
   );
-  DebtPayment copyWithCompanion(DebtPaymentsCompanion data) {
-    return DebtPayment(
+  DebtPaymentRow copyWithCompanion(DebtPaymentsCompanion data) {
+    return DebtPaymentRow(
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -2548,7 +2548,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
 
   @override
   String toString() {
-    return (StringBuffer('DebtPayment(')
+    return (StringBuffer('DebtPaymentRow(')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -2579,7 +2579,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is DebtPayment &&
+      (other is DebtPaymentRow &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
@@ -2592,7 +2592,7 @@ class DebtPayment extends DataClass implements Insertable<DebtPayment> {
           other.notes == this.notes);
 }
 
-class DebtPaymentsCompanion extends UpdateCompanion<DebtPayment> {
+class DebtPaymentsCompanion extends UpdateCompanion<DebtPaymentRow> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -2635,7 +2635,7 @@ class DebtPaymentsCompanion extends UpdateCompanion<DebtPayment> {
        currencyCode = Value(currencyCode),
        paidOn = Value(paidOn),
        rateAtPaymentScaled = Value(rateAtPaymentScaled);
-  static Insertable<DebtPayment> custom({
+  static Insertable<DebtPaymentRow> custom({
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -4557,10 +4557,10 @@ typedef $$DebtsTableUpdateCompanionBuilder =
     });
 
 final class $$DebtsTableReferences
-    extends BaseReferences<_$AppDatabase, $DebtsTable, Debt> {
+    extends BaseReferences<_$AppDatabase, $DebtsTable, DebtRow> {
   $$DebtsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$DebtPaymentsTable, List<DebtPayment>>
+  static MultiTypedResultKey<$DebtPaymentsTable, List<DebtPaymentRow>>
   _debtPaymentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.debtPayments,
     aliasName: 'debts__id__debt_payments__debt_id',
@@ -4855,14 +4855,14 @@ class $$DebtsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $DebtsTable,
-          Debt,
+          DebtRow,
           $$DebtsTableFilterComposer,
           $$DebtsTableOrderingComposer,
           $$DebtsTableAnnotationComposer,
           $$DebtsTableCreateCompanionBuilder,
           $$DebtsTableUpdateCompanionBuilder,
-          (Debt, $$DebtsTableReferences),
-          Debt,
+          (DebtRow, $$DebtsTableReferences),
+          DebtRow,
           PrefetchHooks Function({bool debtPaymentsRefs})
         > {
   $$DebtsTableTableManager(_$AppDatabase db, $DebtsTable table)
@@ -4958,7 +4958,11 @@ class $$DebtsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (debtPaymentsRefs)
-                    await $_getPrefetchedData<Debt, $DebtsTable, DebtPayment>(
+                    await $_getPrefetchedData<
+                      DebtRow,
+                      $DebtsTable,
+                      DebtPaymentRow
+                    >(
                       currentTable: table,
                       referencedTable: $$DebtsTableReferences
                           ._debtPaymentsRefsTable(db),
@@ -4983,14 +4987,14 @@ typedef $$DebtsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $DebtsTable,
-      Debt,
+      DebtRow,
       $$DebtsTableFilterComposer,
       $$DebtsTableOrderingComposer,
       $$DebtsTableAnnotationComposer,
       $$DebtsTableCreateCompanionBuilder,
       $$DebtsTableUpdateCompanionBuilder,
-      (Debt, $$DebtsTableReferences),
-      Debt,
+      (DebtRow, $$DebtsTableReferences),
+      DebtRow,
       PrefetchHooks Function({bool debtPaymentsRefs})
     >;
 typedef $$DebtPaymentsTableCreateCompanionBuilder =
@@ -5023,7 +5027,7 @@ typedef $$DebtPaymentsTableUpdateCompanionBuilder =
     });
 
 final class $$DebtPaymentsTableReferences
-    extends BaseReferences<_$AppDatabase, $DebtPaymentsTable, DebtPayment> {
+    extends BaseReferences<_$AppDatabase, $DebtPaymentsTable, DebtPaymentRow> {
   $$DebtPaymentsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $DebtsTable _debtIdTable(_$AppDatabase db) =>
@@ -5271,14 +5275,14 @@ class $$DebtPaymentsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $DebtPaymentsTable,
-          DebtPayment,
+          DebtPaymentRow,
           $$DebtPaymentsTableFilterComposer,
           $$DebtPaymentsTableOrderingComposer,
           $$DebtPaymentsTableAnnotationComposer,
           $$DebtPaymentsTableCreateCompanionBuilder,
           $$DebtPaymentsTableUpdateCompanionBuilder,
-          (DebtPayment, $$DebtPaymentsTableReferences),
-          DebtPayment,
+          (DebtPaymentRow, $$DebtPaymentsTableReferences),
+          DebtPaymentRow,
           PrefetchHooks Function({bool debtId})
         > {
   $$DebtPaymentsTableTableManager(_$AppDatabase db, $DebtPaymentsTable table)
@@ -5401,14 +5405,14 @@ typedef $$DebtPaymentsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $DebtPaymentsTable,
-      DebtPayment,
+      DebtPaymentRow,
       $$DebtPaymentsTableFilterComposer,
       $$DebtPaymentsTableOrderingComposer,
       $$DebtPaymentsTableAnnotationComposer,
       $$DebtPaymentsTableCreateCompanionBuilder,
       $$DebtPaymentsTableUpdateCompanionBuilder,
-      (DebtPayment, $$DebtPaymentsTableReferences),
-      DebtPayment,
+      (DebtPaymentRow, $$DebtPaymentsTableReferences),
+      DebtPaymentRow,
       PrefetchHooks Function({bool debtId})
     >;
 typedef $$FxRatesTableCreateCompanionBuilder =

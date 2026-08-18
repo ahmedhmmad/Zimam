@@ -90,8 +90,35 @@ lib/
     generated/                   gen-l10n output (git-ignored)
 ```
 
-Features as of Phase 3: `wealth`, `accounts`, `debts`, `settings`,
+Features as of Phase 4: `wealth`, `accounts`, `debts`, `settings`,
 `onboarding`, `insights`. Phase 5 adds `capture`.
+
+### Repayment cost drift
+
+A debt freezes its rate at creation and each payment freezes its own. Those
+columns are written once and never updated — they are the historical facts the
+comparison rests on, and today's rate cannot recover what last March's was.
+
+The drift splits in two, and the split is what makes the figures trustworthy:
+
+```
+  realised   = Σ payment × rate(payment day) − Σ payment × rate(creation)
+  unrealised = outstanding × rate(today)     − outstanding × rate(creation)
+```
+
+Realised drift is money genuinely spent or saved because of when instalments
+happened to fall; unrealised drift still moves until the debt is settled.
+They sum to the total by construction, and a test asserts it across a range of
+rates.
+
+Direction decides what the arithmetic *means*. A debt growing in home-currency
+terms is bad news when you owe it and good news when you are owed it, so
+`DebtCost.isWorseFor` takes the direction rather than assuming one — the same
+number is coloured loss or gain depending on which side the user is on.
+
+Recording a debt or a payment **requires** a cached rate and refuses without
+one. Storing either with no rate would leave it permanently unable to show
+drift, and the rate for that day is unrecoverable once the day passes.
 
 ### Insight rules
 

@@ -9,6 +9,8 @@ import 'package:zimam/core/money/money_formatter.dart';
 import 'package:zimam/core/providers.dart';
 import 'package:zimam/features/accounts/application/accounts_providers.dart';
 import 'package:zimam/features/accounts/domain/account.dart';
+import 'package:zimam/features/debts/application/debts_providers.dart';
+import 'package:zimam/features/debts/domain/debt.dart';
 import 'package:zimam/features/wealth/application/wealth_providers.dart';
 import 'package:zimam/features/wealth/domain/net_worth.dart';
 
@@ -25,6 +27,7 @@ Future<void> pumpApp(
   WidgetTester tester, {
   Currency? homeCurrency,
   List<Account> accounts = const [],
+  List<Debt> debts = const [],
   NetWorth? netWorth,
   List<Override> overrides = const [],
 }) async {
@@ -36,6 +39,8 @@ Future<void> pumpApp(
           (ref) => Stream.value(DigitStyle.western),
         ),
         accountsProvider.overrideWith((ref) => Stream.value(accounts)),
+        debtsProvider.overrideWith((ref) => Stream.value(debts)),
+        debtPositionProvider.overrideWith((ref) async => null),
         netWorthProvider.overrideWith((ref) async => netWorth),
         ...overrides,
       ],

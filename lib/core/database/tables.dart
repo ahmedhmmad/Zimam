@@ -86,6 +86,7 @@ class BalanceSnapshots extends Table with _Timestamps {
 }
 
 /// An obligation, in the currency it was actually incurred in.
+@DataClassName('DebtRow')
 class Debts extends Table with _Timestamps {
   TextColumn get id => text()();
 
@@ -123,6 +124,7 @@ class Debts extends Table with _Timestamps {
 /// A payment against a debt, carrying its own rate for the same reason the
 /// debt carries one: paying in instalments across a moving rate is precisely
 /// the cost the app exists to show.
+@DataClassName('DebtPaymentRow')
 class DebtPayments extends Table with _Timestamps {
   TextColumn get id => text()();
 
