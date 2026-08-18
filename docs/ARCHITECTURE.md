@@ -361,9 +361,41 @@ thresholds are tested.
 | Dark palette | Derived, not specified — and **confirmed to exist nowhere upstream**. The Stitch project's Tailwind config carries only the 47 light tokens; its "dark" screens are `dark:` variants pointing back at light token names, which is why the dark app bar renders near-invisible. Our reconstruction from the `*-fixed` tonal tokens is the best available source. See `AppColorSchemes.dark`. |
 | ~~"Attention" colour~~ | **Closed.** Supplied by the palette specimen and adopted: `#7a5300` with a `#ffefd1` / `#422c00` container pair. Verified at 6.85:1 on white and 11.63:1 for content on its container. Dark mode remains ours, the specimen being light-only. |
 | ~~Categorical colour~~ | **Closed.** `AppCategoryColors`, five tonal teal steps plus a neutral tail — see §6. The specimen's own seven-step ramp was measured and rejected. |
+| App lock | Requested, not built. This is a *local device* lock — biometric or PIN against the platform keystore — not an account. There is no server to authenticate against and adding one would end the local-first guarantee. See §9. |
 | Loss container | The design system's `tertiary-container` is a dark fill with light content, unlike the soft `secondary-container`, so a loss chip renders far louder than a gain chip. Transcribed as given; worth correcting upstream. |
 | Source designs contradict the written system | The generated screens use `rounded-full` 60 times (the system forbids pill buttons) and `rounded-xl` = 12px for cards (the system fixes cards at 16px), and apply `font-label-mono` to prose — mono is the most-used font class in the export, though it is specified for figures only. The written system wins; the theme follows it. |
 | Theme/locale persistence | Still in memory. Home currency and digit style persist; theme and locale reset on cold start. |
 | Widget tests avoid the database | Drift's stream machinery leaves timers pending after teardown, tripping the test binding's `!timersPending` assertion and wedging every later test in the file. Widget tests stub the data providers instead; the DAOs are covered separately against a real in-memory database. |
 | `drift_dev schema dump` | Broken against drift 2.34.x. Resolve before the first migration. |
 | `core/widgets/not_built_yet.dart` | Phase 0 scaffolding so empty-state buttons are not dead. Delete once Phases 2 and 4 provide real destinations. |
+
+---
+
+## 9. App lock (planned)
+
+The financial data on this device deserves a lock, but "login" here cannot mean
+what it usually means. There is no server, no account, and nothing to
+authenticate *against* — introducing one would convert a local-first app into a
+client for a service that holds people's balances, which is precisely the
+architecture this project exists to avoid.
+
+What it means instead is a **local gate**: device biometrics or a PIN, checked
+against the platform keystore, with no credential ever leaving the phone and no
+password for anyone to reset.
+
+Consequences worth deciding before it is built:
+
+* **A forgotten PIN cannot be recovered.** With no server there is no reset
+  path. Either the lock is convenience-only — recoverable by reinstalling,
+  which also discards the data — or the database is encrypted with a
+  key derived from it and a forgotten PIN means the data is genuinely gone.
+  Those are very different products and the choice must be explicit.
+* **Encryption is a separate decision from locking.** A gate that only hides
+  the UI leaves the SQLite file readable to anyone with the device unlocked and
+  a file manager, or to an ADB backup. Encrypting at rest means SQLCipher and a
+  schema migration, and is worth doing deliberately rather than implied by the
+  word "login".
+* **Biometrics need a fallback.** Sensors fail, and Android requires a device
+  credential path anyway.
+* **The lock must not block the notification listener** (Phase 5), which runs
+  without the UI in the foreground.

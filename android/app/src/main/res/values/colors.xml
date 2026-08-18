@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The app canvas, so the launch window matches the first Flutter frame
+         instead of flashing white on every cold start. Kept in step with
+         AppColorSchemes.light.surface in docs/DESIGN.md. -->
+    <color name="launch_background">#F2F4F4</color>
+    <color name="launch_foreground">#1B5E63</color>
+</resources>

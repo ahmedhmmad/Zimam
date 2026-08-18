@@ -21,6 +21,32 @@ class SettingsDao extends DatabaseAccessor<AppDatabase> with _$SettingsDaoMixin 
   static const _digitStyle = 'digit_style';
   static const _dismissedInsights = 'dismissed_insights';
   static const _scatteredThreshold = 'scattered_threshold_minor';
+  static const _locale = 'locale';
+  static const _themeMode = 'theme_mode';
+
+  /// The chosen UI language, or null to follow the device.
+  ///
+  /// Stored as a bare language code rather than a full tag: the app ships two
+  /// languages and a stored `ar-EG` would fail to match the `ar` delegate,
+  /// silently dropping the user back to English — which is exactly the bug
+  /// this setting exists to prevent.
+  Future<String?> localeCode() async {
+    final raw = await _read(_locale);
+    return (raw == null || raw.isEmpty) ? null : raw;
+  }
+
+  /// Empty string means "follow the device", which is distinct from unset.
+  Future<void> setLocaleCode(String? code) => _write(_locale, code ?? '');
+
+  Stream<String?> watchLocaleCode() => _watch(
+    _locale,
+  ).map((raw) => (raw == null || raw.isEmpty) ? null : raw);
+
+  /// `system` | `light` | `dark`. Defaults to following the device.
+  Future<String> themeModeName() async =>
+      await _read(_themeMode) ?? 'system';
+
+  Future<void> setThemeModeName(String name) => _write(_themeMode, name);
 
   /// The currency every balance is reported in — the app's central premise.
   ///

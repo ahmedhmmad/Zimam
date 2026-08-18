@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches AppColorSchemes.dark.surface. -->
+    <color name="launch_background">#121414</color>
+    <color name="launch_foreground">#93D1D6</color>
+</resources>

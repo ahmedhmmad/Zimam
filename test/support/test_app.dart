@@ -7,6 +7,7 @@ import 'package:zimam/app.dart';
 import 'package:zimam/core/money/currency.dart';
 import 'package:zimam/core/money/money_formatter.dart';
 import 'package:zimam/core/providers.dart';
+import 'package:zimam/core/settings/app_preferences.dart';
 import 'package:zimam/features/accounts/application/accounts_providers.dart';
 import 'package:zimam/features/accounts/domain/account.dart';
 import 'package:zimam/features/debts/application/debts_providers.dart';
@@ -29,11 +30,17 @@ Future<void> pumpApp(
   List<Account> accounts = const [],
   List<Debt> debts = const [],
   NetWorth? netWorth,
+  Locale? locale,
+  ThemeMode themeMode = ThemeMode.light,
   List<Override> overrides = const [],
 }) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        // These throw unless overridden, since `main()` is what normally
+        // supplies them from storage before the first frame.
+        initialLocaleProvider.overrideWithValue(locale),
+        initialThemeModeProvider.overrideWithValue(themeMode),
         homeCurrencyProvider.overrideWith((ref) => Stream.value(homeCurrency)),
         digitStyleProvider.overrideWith(
           (ref) => Stream.value(DigitStyle.western),
