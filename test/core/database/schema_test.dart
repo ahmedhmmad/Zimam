@@ -11,8 +11,8 @@ void main() {
   tearDown(() async => db.close());
 
   group('schema', () {
-    test('opens at version 1 and creates every table', () async {
-      expect(db.schemaVersion, 1);
+    test('opens at the current version and creates every table', () async {
+      expect(db.schemaVersion, 2);
 
       // Touching each table proves it was created.
       expect(await db.select(db.accounts).get(), isEmpty);
@@ -21,6 +21,8 @@ void main() {
       expect(await db.select(db.debtPayments).get(), isEmpty);
       expect(await db.select(db.fxRates).get(), isEmpty);
       expect(await db.select(db.settings).get(), isEmpty);
+      expect(await db.select(db.pendingSuggestions).get(), isEmpty);
+      expect(await db.select(db.unparsedSamples).get(), isEmpty);
     });
 
     test('stores timestamps as UTC text, not local integers', () async {
@@ -131,10 +133,11 @@ void main() {
     test('there is no destructive fallback', () async {
       // If a future schema bump forgets its migration step, the app must fail
       // loudly rather than quietly wiping the only copy of the user's data.
-      // This asserts the guard exists rather than a deleteAllTables() default.
-      final strategy = db.migration;
+      // 1 to 2 is a real migration now, so the guard is checked one version
+      // beyond what exists. See migration_v1_to_v2_test.dart for the step
+      // itself, exercised against an actual v1 database.
       expect(
-        () => strategy.onUpgrade(FakeMigrator(), 1, 2),
+        () => db.migration.onUpgrade(FakeMigrator(), 2, 3),
         throwsStateError,
       );
     });

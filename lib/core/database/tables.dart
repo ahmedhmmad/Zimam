@@ -187,3 +187,76 @@ class Settings extends Table with _Timestamps {
   @override
   Set<Column> get primaryKey => {key};
 }
+
+/// A transaction the parser extracted, waiting for the user to confirm it.
+///
+/// Never written to an account by itself. A regex over a bank's prose is a
+/// guess however good, and a wrong balance entered silently is worse than no
+/// balance at all — so everything lands here first and the user says yes.
+///
+/// The raw title and body are kept so the user can see what the suggestion was
+/// derived from, and so a mis-parse can be reported. They never leave the
+/// device except through the explicit, per-item share action, and Phase 6's
+/// "delete all my data" clears them along with everything else.
+@DataClassName('PendingSuggestionRow')
+class PendingSuggestions extends Table with _Timestamps {
+  TextColumn get id => text()();
+
+  /// Which rule produced this, so a bad figure can be traced to its pattern.
+  TextColumn get ruleId => text()();
+
+  TextColumn get packageName => text()();
+
+  IntColumn get amountMinor => integer()();
+  TextColumn get currencyCode => text().withLength(min: 3, max: 3)();
+
+  /// Serialised `TransactionDirection`.
+  TextColumn get direction => text()();
+
+  /// The balance the message reported, when it stated one. More valuable than
+  /// the amount: it is an observation of the true balance rather than
+  /// something inferred by arithmetic.
+  IntColumn get balanceMinor => integer().nullable()();
+
+  TextColumn get merchant => text().nullable()();
+  DateTimeColumn get postedAt => dateTime()();
+
+  /// The notification as it arrived, for review.
+  TextColumn get rawTitle => text().withDefault(const Constant(''))();
+  TextColumn get rawBody => text().withDefault(const Constant(''))();
+
+  /// The account the user matched it to. Null until they choose.
+  TextColumn get accountId =>
+      text().nullable().references(Accounts, #id, onDelete: KeyAction.setNull)();
+
+  /// Set once the user has confirmed or rejected. Kept rather than deleted so
+  /// the same notification is not suggested twice.
+  DateTimeColumn get resolvedAt => dateTime().nullable()();
+
+  /// `confirmed` | `rejected`, null while pending.
+  TextColumn get resolution => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// A notification no rule matched.
+///
+/// Stored so the user can offer it — one item at a time, redacted, and only if
+/// they choose to — towards improving the rules. Retention is capped: this is
+/// third-party text about someone's money, and keeping an unbounded log of it
+/// would be indefensible however local it stays.
+@DataClassName('UnparsedSampleRow')
+class UnparsedSamples extends Table with _Timestamps {
+  TextColumn get id => text()();
+  TextColumn get packageName => text()();
+  TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get body => text().withDefault(const Constant(''))();
+  DateTimeColumn get postedAt => dateTime()();
+
+  /// When the user shared it. Null means it has never left the device.
+  DateTimeColumn get sharedAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}

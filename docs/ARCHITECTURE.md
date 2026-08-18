@@ -240,11 +240,21 @@ midnight and staleness is computed by comparing calendar days, that default
 makes every conversion report a day staler than it is for any user west of
 UTC. This was caught by a test, not by review.
 
-**Known toolchain gap:** `dart run drift_dev schema dump` currently fails
-against drift 2.34.x (`allSchemaEntities` was moved in an internal refactor),
-so there are no snapshots in `drift_schemas/` yet. Nothing depends on them at
-v1 — there are no migrations to verify — but this must be resolved before the
-first schema bump.
+**v2 (Phase 5)** adds `pending_suggestions` and `unparsed_samples`. Purely
+additive: two new tables, no column touched on the six that already existed,
+so there is no path by which an existing balance could be lost.
+
+`drift_dev schema dump` is still broken against drift 2.34.x, so
+`migration_v1_to_v2_test.dart` writes the v1 schema out by hand instead. That
+fixture is a frozen copy of what Phase 1 shipped and **must not be updated**
+when the live schema moves — being frozen is what makes it a migration test.
+It builds a real v1 database with an account, a snapshot, a debt, a rate and a
+setting in it, opens it with current code, and asserts every row survives,
+including the debt's frozen creation rate.
+
+Migrations run one version at a time, so upgrading v1→v4 executes the same
+steps in the same order as someone who upgraded through each release. A
+version with no step still throws.
 
 ---
 

@@ -41,7 +41,16 @@ part 'app_database.g.dart';
 /// dart run drift_dev schema dump lib/core/database/app_database.dart drift_schemas
 /// ```
 @DriftDatabase(
-  tables: [Accounts, BalanceSnapshots, Debts, DebtPayments, FxRates, Settings],
+  tables: [
+    Accounts,
+    BalanceSnapshots,
+    Debts,
+    DebtPayments,
+    FxRates,
+    Settings,
+    PendingSuggestions,
+    UnparsedSamples,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -50,7 +59,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   /// Store timestamps as ISO-8601 text in UTC, not as unix seconds.
   ///
@@ -74,15 +83,38 @@ class AppDatabase extends _$AppDatabase {
       // account must take its snapshots with it rather than orphan them.
       await customStatement('PRAGMA foreign_keys = ON');
     },
-    // No steps yet — v1 is the initial schema. Every future version adds its
-    // own `from1To2`-style step here and never touches the ones below it.
+    // Applied one version at a time, so upgrading from v1 to v4 runs the same
+    // steps in the same order as a user who upgraded through each release.
+    // A version with no step throws rather than silently doing nothing —
+    // there is no cloud copy to repair from if it does.
     onUpgrade: (m, from, to) async {
-      throw StateError(
-        'No migration defined from schema v$from to v$to. Write one before '
-        'bumping schemaVersion — there is no cloud copy of this data.',
-      );
+      for (var version = from; version < to; version++) {
+        switch (version) {
+          case 1:
+            await _v1ToV2(m);
+          default:
+            throw StateError(
+              'No migration defined from schema v$version to v${version + 1}. '
+              'Write one before bumping schemaVersion — there is no cloud '
+              'copy of this data.',
+            );
+        }
+      }
     },
   );
+
+  /// Phase 5 adds notification capture: pending suggestions and unparsed
+  /// samples.
+  ///
+  /// Purely additive — two new tables, and not a single column touched on the
+  /// six that already exist. That is why this step is safe to write in one
+  /// line: nothing is copied, rewritten or dropped, so there is no path by
+  /// which an existing balance could be lost. A future step that is not
+  /// additive gets a copy-and-swap and a test asserting row counts survive.
+  Future<void> _v1ToV2(Migrator m) async {
+    await m.createTable(pendingSuggestions);
+    await m.createTable(unparsedSamples);
+  }
 }
 
 /// Opens the database file in the app's private documents directory.
