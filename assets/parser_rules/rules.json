@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "_comment": [
+    "Parsing rules for bank notifications. Data, not code: every bank formats",
+    "differently, formats change without notice, and this app's audience uses",
+    "institutions no developer will ever hold an account with.",
+    "",
+    "Each rule is a package matcher plus one regular expression with named",
+    "groups. The group names ARE the field mapping: amount, currency, balance",
+    "and merchant are read out of the match by name.",
+    "",
+    "Patterns are matched case-insensitively against title and body joined by",
+    "a newline, with dotAll on. Anchor loosely: banks reword their prose more",
+    "often than they change its shape.",
+    "",
+    "Every amount ends with lookaheads forbidding a further digit and a further",
+    "decimal group. Without both, a greedy match turns 45.5001 into 45.500, or",
+    "backtracks to 45 - a silently truncated figure, the worst thing it can do.",
+    "",
+    "A rule with no `direction` infers it from debitKeywords/creditKeywords.",
+    "If both or neither appear the message is treated as ambiguous and",
+    "dropped, because guessing which way money moved is a coin flip.",
+    "",
+    "`packages: []` matches any app. Use it only with a pattern specific",
+    "enough to stand on its own."
+  ],
+  "rules": [
+    {
+      "id": "generic-en-debit-credit",
+      "_comment": "The shape most English-language bank alerts share: a verb, an amount with its currency, and often a resulting balance.",
+      "packages": [],
+      "pattern": "(?:debited|credited|withdrawn|deposited|purchase|payment|transfer)[^\\d]{0,40}(?<currency>[A-Z]{3})\\s*(?<amount>[\\d,]+(?:\\.\\d{1,3})?)(?!\\d)(?!\\.\\d)(?:[\\s\\S]{0,80}?(?:balance|available)[^\\d]{0,20}(?:[A-Z]{3})?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,3})?)(?!\\d)(?!\\.\\d))?",
+      "debitKeywords": [
+        "debited",
+        "withdrawn",
+        "purchase",
+        "spent",
+        "payment of",
+        "deducted"
+      ],
+      "creditKeywords": [
+        "credited",
+        "deposited",
+        "received",
+        "refund",
+        "salary"
+      ]
+    },
+    {
+      "id": "generic-en-amount-first",
+      "_comment": "Alerts that lead with the amount: 'JOD 45.500 has been debited from...'.",
+      "packages": [],
+      "pattern": "(?<currency>[A-Z]{3})\\s*(?<amount>[\\d,]+(?:\\.\\d{1,3})?)(?!\\d)(?!\\.\\d)\\s*(?:has been|was)?\\s*(?:debited|credited|withdrawn|deposited)(?:[\\s\\S]{0,60}?(?:at|to|from)\\s+(?<merchant>[A-Za-z0-9 &'.-]{2,40}))?",
+      "debitKeywords": [
+        "debited",
+        "withdrawn"
+      ],
+      "creditKeywords": [
+        "credited",
+        "deposited"
+      ]
+    },
+    {
+      "id": "generic-ar-debit-credit",
+      "_comment": "Arabic alerts. Amounts arrive in Western or Arabic-Indic digits; Money.parse accepts both.",
+      "packages": [],
+      "pattern": "(?:خصم|سحب|شراء|دفع|إيداع|ايداع|تحويل|استلام)[^\\d٠-٩]{0,40}(?<amount>[\\d٠-٩,٬]+(?:[.٫][\\d٠-٩]{1,3})?)(?![\\d٠-٩])(?![.٫][\\d٠-٩])\\s*(?<currency>[A-Z]{3}|د\\.أ|ر\\.س|ج\\.م|درهم|دينار|ريال|جنيه)",
+      "debitKeywords": [
+        "خصم",
+        "سحب",
+        "شراء",
+        "دفع",
+        "مدين"
+      ],
+      "creditKeywords": [
+        "إيداع",
+        "ايداع",
+        "استلام",
+        "دائن",
+        "راتب"
+      ]
+    },
+    {
+      "id": "generic-symbol-amount",
+      "_comment": "Symbols only, for the currencies where a symbol is unambiguous. The dollar sign is deliberately absent: it could be USD, CAD, AUD or a dozen more, and guessing is unacceptable in an app whose premise is knowing which currency you hold.",
+      "packages": [],
+      "pattern": "(?<currency>[£€])\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?!\\d)(?!\\.\\d)[\\s\\S]{0,60}?(?:debited|credited|paid|received|spent)",
+      "debitKeywords": [
+        "debited",
+        "paid",
+        "spent"
+      ],
+      "creditKeywords": [
+        "credited",
+        "received"
+      ]
+    }
+  ]
+}
