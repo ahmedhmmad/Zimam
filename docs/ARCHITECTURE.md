@@ -120,6 +120,15 @@ Recording a debt or a payment **requires** a cached rate and refuses without
 one. Storing either with no rate would leave it permanently unable to show
 drift, and the rate for that day is unrecoverable once the day passes.
 
+Amending a debt leaves the frozen rate alone, and locks the two fields it
+depends on. The rate is a ratio for one pair on one day, so it stays correct
+when the *principal* is corrected — 2,500 dollars at last March's rate is
+still meaningful. It stops being meaningful the moment either end of the pair
+moves: a different currency leaves the rate's base pointing at a currency the
+debt no longer uses, and a different date leaves it belonging to a day it was
+not observed on, which cannot be re-derived. Correcting either means recording
+the debt again.
+
 ### Insight rules
 
 Rules are plain synchronous functions over an `InsightContext` that is

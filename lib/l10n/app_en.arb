@@ -235,5 +235,7 @@
   "@debtPaymentRate": { "placeholders": { "rate": { "type": "String" } } },
   "debtPaymentNone": "No payments recorded yet.",
   "debtsExcluded": "{count, plural, =1{1 debt is not included — no exchange rate for it yet} other{{count} debts are not included — no exchange rates for them yet}}",
-  "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } }
+  "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } },
+
+  "debtLockedAfterCreation": "Cannot be changed after recording"
 }

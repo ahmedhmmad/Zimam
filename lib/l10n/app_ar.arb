@@ -205,5 +205,7 @@
   "@debtPaymentRate": { "placeholders": { "rate": { "type": "String" } } },
   "debtPaymentNone": "لم تُسجَّل دفعات بعد.",
   "debtsExcluded": "{count, plural, =1{دين واحد غير محتسب — لا يوجد سعر صرف له بعد} =2{دينان غير محتسبَين — لا توجد أسعار صرف لهما بعد} few{{count} ديون غير محتسبة — لا توجد أسعار صرف لها بعد} other{{count} دينًا غير محتسب — لا توجد أسعار صرف لها بعد}}",
-  "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } }
+  "@debtsExcluded": { "placeholders": { "count": { "type": "int" } } },
+
+  "debtLockedAfterCreation": "لا يمكن تغييره بعد التسجيل"
 }

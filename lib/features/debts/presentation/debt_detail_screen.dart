@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/database/enums.dart';
 import '../../../core/money/money.dart';
 import '../../../core/providers.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_semantic_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/money_text.dart';
@@ -34,6 +36,12 @@ class DebtDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(debt.counterparty),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            tooltip: l10n.debtEdit,
+            onPressed: () =>
+                context.push('${AppRoutes.debtForm}?id=${debt.id}'),
+          ),
           IconButton(
             icon: Icon(
               debt.isSettled ? Icons.undo : Icons.check_circle_outline,

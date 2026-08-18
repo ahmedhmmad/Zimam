@@ -99,7 +99,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.debtForm,
-        builder: (context, state) => const DebtFormScreen(),
+        builder: (context, state) =>
+            DebtFormScreen(debtId: state.uri.queryParameters['id']),
       ),
       GoRoute(
         path: AppRoutes.debtDetail,

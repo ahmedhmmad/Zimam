@@ -185,6 +185,120 @@ void main() {
     );
   });
 
+  group('amending a debt', () {
+    test('leaves the frozen rate untouched', () async {
+      // The point of allowing edits at all: correcting a typo must not
+      // silently re-baseline the comparison the whole feature rests on.
+      await createDebt();
+      final before = (await dao.byId('d1'))!.rateAtCreation;
+
+      await dao.updateDetails(
+        id: 'd1',
+        counterparty: 'Ahmad Qasem',
+        direction: DebtDirection.iOwe,
+        principal: Money.parse('2500.00', usd),
+        notes: 'corrected',
+      );
+
+      final after = (await dao.byId('d1'))!;
+      expect(after.rateAtCreation.rateScaled, before.rateScaled);
+      expect(after.rateAtCreation.rateDate, before.rateDate);
+      expect(after.createdOn, borrowedOn);
+      expect(after.currency, usd);
+    });
+
+    test('a corrected principal is valued at the original rate', () async {
+      await createDebt();
+      await dao.updateDetails(
+        id: 'd1',
+        counterparty: 'Ahmad Q.',
+        direction: DebtDirection.iOwe,
+        principal: Money.parse('2500.00', usd),
+      );
+
+      final cost = const DebtCostCalculator().compute(
+        (await dao.byId('d1'))!,
+        todaysRate: rateOf('0.731', on: today),
+      )!;
+
+      // 2,500 x 0.709 = 1,772.500, not 2,500 at some newer rate.
+      expect(cost.costAtOriginalRate, Money.parse('1772.500', jod));
+      expect(cost.costAtTodaysRate, Money.parse('1827.500', jod));
+    });
+
+    test('updates the editable fields', () async {
+      await createDebt();
+      final due = DateTime.utc(2026, 12, 1);
+      await dao.updateDetails(
+        id: 'd1',
+        counterparty: 'Layla H.',
+        direction: DebtDirection.owedToMe,
+        principal: Money.parse('900.00', usd),
+        dueOn: due,
+        notes: 'moved to the other side',
+      );
+
+      final debt = (await dao.byId('d1'))!;
+      expect(debt.counterparty, 'Layla H.');
+      expect(debt.direction, DebtDirection.owedToMe);
+      expect(debt.principal, Money.parse('900.00', usd));
+      expect(debt.dueOn, due);
+      expect(debt.notes, 'moved to the other side');
+    });
+
+    test('payments and their own rates survive an edit', () async {
+      await createDebt();
+      await dao.addPayment(
+        id: 'p1',
+        debtId: 'd1',
+        amount: Money.parse('500.00', usd),
+        rateAtPayment: rateOf('0.750', on: DateTime.utc(2025, 9, 1)),
+        paidOn: DateTime.utc(2025, 9, 1),
+      );
+
+      await dao.updateDetails(
+        id: 'd1',
+        counterparty: 'Ahmad Q.',
+        direction: DebtDirection.iOwe,
+        principal: Money.parse('2500.00', usd),
+      );
+
+      final debt = (await dao.byId('d1'))!;
+      expect(debt.payments, hasLength(1));
+      expect(
+        debt.payments.single.costInHomeCurrency,
+        Money.parse('375.000', jod),
+      );
+      // Outstanding tracks the corrected principal.
+      expect(debt.outstanding, Money.parse('2000.00', usd));
+    });
+
+    test('clearing the due date and notes is possible', () async {
+      await dao.create(
+        id: 'd9',
+        counterparty: 'X',
+        direction: DebtDirection.iOwe,
+        principal: Money.parse('100.00', usd),
+        homeCurrency: jod,
+        rateAtCreation: rateOf('0.709'),
+        createdOn: borrowedOn,
+        dueOn: DateTime.utc(2026, 1, 1),
+        notes: 'temporary',
+      );
+
+      await dao.updateDetails(
+        id: 'd9',
+        counterparty: 'X',
+        direction: DebtDirection.iOwe,
+        principal: Money.parse('100.00', usd),
+      );
+
+      final debt = (await dao.byId('d9'))!;
+      expect(debt.dueOn, isNull);
+      expect(debt.notes, isNull);
+    });
+  });
+
   test('the home currency at creation is preserved', () async {
     // If the user later switches home currency, this debt's original cost
     // must still mean what it meant when it was recorded.

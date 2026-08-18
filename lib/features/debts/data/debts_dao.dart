@@ -73,6 +73,39 @@ class DebtsDao extends DatabaseAccessor<AppDatabase> with _$DebtsDaoMixin {
     );
   }
 
+  /// Amends a debt's details.
+  ///
+  /// Currency, creation date and the creation rate are deliberately absent.
+  ///
+  /// The rate is stored as a ratio for one currency pair on one day, so it
+  /// stays correct when the *principal* is corrected — 2,500 dollars at last
+  /// March's rate is still a meaningful figure. It stops being meaningful the
+  /// moment either end of that pair moves: changing the currency leaves a rate
+  /// whose base is a currency the debt no longer uses, and changing the date
+  /// leaves a rate belonging to a different day, which cannot be re-derived
+  /// because historical rates are not cached.
+  ///
+  /// Correcting either of those means recording the debt again.
+  Future<void> updateDetails({
+    required String id,
+    required String counterparty,
+    required DebtDirection direction,
+    required Money principal,
+    DateTime? dueOn,
+    String? notes,
+  }) async {
+    await (update(debts)..where((d) => d.id.equals(id))).write(
+      DebtsCompanion(
+        counterparty: Value(counterparty),
+        direction: Value(direction.name),
+        principalMinor: Value(principal.minorUnits),
+        dueOn: Value(dueOn),
+        notes: Value(notes),
+        updatedAt: Value(DateTime.now().toUtc()),
+      ),
+    );
+  }
+
   /// Records a payment with the rate on the day it was made.
   Future<void> addPayment({
     required String id,
